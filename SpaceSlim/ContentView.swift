@@ -8,19 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var photoService = PhotoService()
+    @StateObject private var videoService = VideoService()
+    @StateObject private var storageService = StorageService()
+
     var body: some View {
         TabView {
-            HomeView()
+            HomeView(photoService: photoService, videoService: videoService, storageService: storageService)
                 .tabItem {
                     Label("Clean", systemImage: "trash")
                 }
 
-            Text("Compression List")
-                .tabItem {
-                    Label("Compress", systemImage: "arrow.down.right.and.arrow.up.left.anywhere")
-                }
+            NavigationStack {
+                VideoCompressionView(videoService: videoService)
+            }
+            .tabItem {
+                Label("Compress", systemImage: "arrow.down.right.and.arrow.up.left.anywhere")
+            }
 
-            Text("Settings")
+            SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")
                 }

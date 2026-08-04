@@ -2,7 +2,7 @@ import SwiftUI
 import Photos
 
 struct VideoCompressionView: View {
-    @StateObject private var videoService = VideoService()
+    @ObservedObject var videoService: VideoService
     @State private var allVideos: [PHAsset] = []
 
     var body: some View {

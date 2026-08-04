@@ -2,7 +2,7 @@ import SwiftUI
 import Photos
 
 struct VideoClassificationView: View {
-    @StateObject private var videoService = VideoService()
+    @ObservedObject var videoService: VideoService
 
     var body: some View {
         List {
@@ -27,9 +27,6 @@ struct VideoClassificationView: View {
             if videoService.isScanning {
                 ProgressView("Classifying...")
             }
-        }
-        .onAppear {
-            videoService.fetchAndClassifyVideos()
         }
     }
 }

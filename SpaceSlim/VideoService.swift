@@ -36,6 +36,19 @@ class VideoService: ObservableObject {
         }
     }
 
+    func calculateSize(for assets: [PHAsset]) async -> Int64 {
+        var totalSize: Int64 = 0
+        for asset in assets {
+            let resources = PHAssetResource.assetResources(for: asset)
+            if let resource = resources.first {
+                if let size = resource.value(forKey: "fileSize") as? Int64 {
+                    totalSize += size
+                }
+            }
+        }
+        return totalSize
+    }
+
     func compressVideo(asset: PHAsset, quality: String) async {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true

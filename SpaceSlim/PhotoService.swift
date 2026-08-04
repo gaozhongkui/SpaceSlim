@@ -5,6 +5,7 @@ import Combine
 
 class PhotoService: ObservableObject {
     @Published var similarGroups: [PhotoGroup] = []
+    @Published var duplicateGroups: [PhotoGroup] = []
     @Published var isScanning = false
     @Published var progress: Double = 0
     @Published var authorizationStatus: PHAuthorizationStatus = .notDetermined
@@ -26,13 +27,14 @@ class PhotoService: ObservableObject {
         }
     }
 
-    func scanForSimilarPhotos() async {
+    func scanForSimilarAndDuplicatePhotos() async {
         guard authorizationStatus == .authorized || authorizationStatus == .limited else { return }
 
         DispatchQueue.main.async {
             self.isScanning = true
             self.progress = 0
             self.similarGroups = []
+            self.duplicateGroups = []
         }
 
         let fetchOptions = PHFetchOptions()
@@ -53,43 +55,54 @@ class PhotoService: ObservableObject {
             }
         }
 
-        // Grouping logic (Simplified for now: comparing adjacent fingerprints)
-        var groups: [PhotoGroup] = []
-        var currentGroup: [PHAsset] = []
+        // Grouping logic
+        var similar: [PhotoGroup] = []
+        var duplicates: [PhotoGroup] = []
+
+        // Simple hash-based duplicate detection (by duration/pixel size/etc as proxy or actual data)
+        // For real duplicates, we usually compare MD5 or exact pixel data.
+        // Here we'll use a very low distance threshold for Vision feature prints.
+
+        var processedIndices = Set<Int>()
 
         for i in 0..<fingerprints.count {
-            if currentGroup.isEmpty {
-                currentGroup.append(fingerprints[i].asset)
-                continue
-            }
+            if processedIndices.contains(i) { continue }
 
-            let previousFingerprint = fingerprints[i-1].fingerprint
-            let currentFingerprint = fingerprints[i].fingerprint
+            var currentGroup: [PHAsset] = [fingerprints[i].asset]
+            var isDuplicate = false
 
-            do {
-                var distance: Float = 0
-                try previousFingerprint.computeDistance(&distance, to: currentFingerprint)
+            for j in (i + 1)..<fingerprints.count {
+                if processedIndices.contains(j) { continue }
 
-                // Distance < 10 is usually very similar
-                if distance < 10.0 {
-                    currentGroup.append(fingerprints[i].asset)
-                } else {
-                    if currentGroup.count > 1 {
-                        groups.append(PhotoGroup(assets: currentGroup))
+                do {
+                    var distance: Float = 0
+                    try fingerprints[i].fingerprint.computeDistance(&distance, to: fingerprints[j].fingerprint)
+
+                    if distance < 1.0 { // Extremely similar = Duplicate
+                        currentGroup.append(fingerprints[j].asset)
+                        processedIndices.insert(j)
+                        isDuplicate = true
+                    } else if distance < 10.0 { // Visually similar
+                        currentGroup.append(fingerprints[j].asset)
+                        processedIndices.insert(j)
                     }
-                    currentGroup = [fingerprints[i].asset]
+                } catch {
+                    print("Error: \(error)")
                 }
-            } catch {
-                print("Error computing distance: \(error)")
             }
-        }
 
-        if currentGroup.count > 1 {
-            groups.append(PhotoGroup(assets: currentGroup))
+            if currentGroup.count > 1 {
+                if isDuplicate {
+                    duplicates.append(PhotoGroup(assets: currentGroup))
+                } else {
+                    similar.append(PhotoGroup(assets: currentGroup))
+                }
+            }
         }
 
         DispatchQueue.main.async {
-            self.similarGroups = groups
+            self.similarGroups = similar
+            self.duplicateGroups = duplicates
             self.isScanning = false
         }
     }
@@ -117,6 +130,39 @@ class PhotoService: ObservableObject {
                 }
             }
         }
+    }
+
+    func calculateSize(for assets: [PHAsset]) async -> Int64 {
+        var totalSize: Int64 = 0
+        for asset in assets {
+            let resources = PHAssetResource.assetResources(for: asset)
+            if let resource = resources.first {
+                if let size = resource.value(forKey: "fileSize") as? Int64 {
+                    totalSize += size
+                }
+            }
+        }
+        return totalSize
+    }
+
+    func calculateGroupsSize(groups: [PhotoGroup]) async -> Int64 {
+        var totalSize: Int64 = 0
+        for group in groups {
+            // Reclaimable = Total size of group - size of one photo (the one we keep)
+            var groupSize: Int64 = 0
+            for asset in group.assets {
+                let resources = PHAssetResource.assetResources(for: asset)
+                if let size = resources.first?.value(forKey: "fileSize") as? Int64 {
+                    groupSize += size
+                }
+            }
+            if !group.assets.isEmpty {
+                // Approximate reclaimable by total - 1
+                let onePhotoSize = groupSize / Int64(group.assets.count)
+                totalSize += (groupSize - onePhotoSize)
+            }
+        }
+        return totalSize
     }
 }
 

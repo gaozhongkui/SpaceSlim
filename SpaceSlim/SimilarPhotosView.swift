@@ -2,29 +2,11 @@ import SwiftUI
 import Photos
 
 struct SimilarPhotosView: View {
-    @StateObject private var photoService = PhotoService()
+    @ObservedObject var photoService: PhotoService
 
     var body: some View {
         VStack {
-            if photoService.authorizationStatus == .notDetermined {
-                VStack(spacing: 20) {
-                    Image(systemName: "photo.on.rectangle.angled")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.blue)
-                    Text("Photo Library Access Required")
-                        .font(.headline)
-                    Text("Please authorize to scan for similar photos")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Button("Authorize") {
-                        Task {
-                            await photoService.requestAuthorization()
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .padding()
-            } else if photoService.isScanning {
+            if photoService.isScanning {
                 VStack(spacing: 20) {
                     ProgressView(value: photoService.progress)
                         .progressViewStyle(.linear)
@@ -43,13 +25,6 @@ struct SimilarPhotosView: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding()
-                .onAppear {
-                    if photoService.authorizationStatus == .authorized || photoService.authorizationStatus == .limited {
-                        Task {
-                            await photoService.scanForSimilarPhotos()
-                        }
-                    }
-                }
             } else {
                 List {
                     ForEach(photoService.similarGroups) { group in
@@ -158,6 +133,6 @@ struct AssetItemView: View {
 
 #Preview {
     NavigationStack {
-        SimilarPhotosView()
+        SimilarPhotosView(photoService: PhotoService())
     }
 }
