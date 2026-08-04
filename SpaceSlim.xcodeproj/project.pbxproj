@@ -254,7 +254,7 @@
 				DEVELOPMENT_TEAM = 2TZZP9WGJM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need photo library access to scan and classify similar photos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SpaceSlim needs access to your photo library to scan photos and videos for cleanup, save compressed videos, and delete items you choose to remove.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,7 +288,7 @@
 				DEVELOPMENT_TEAM = 2TZZP9WGJM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need photo library access to scan and classify similar photos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SpaceSlim needs access to your photo library to scan photos and videos for cleanup, save compressed videos, and delete items you choose to remove.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

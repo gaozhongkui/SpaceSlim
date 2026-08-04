@@ -2,15 +2,24 @@ import Photos
 import Vision
 import SwiftUI
 import Combine
+import CoreGraphics
 
 class PhotoService: ObservableObject {
     @Published var similarGroups: [PhotoGroup] = []
     @Published var duplicateGroups: [PhotoGroup] = []
+    @Published var blurryPhotos: [PHAsset] = []
     @Published var isScanning = false
     @Published var progress: Double = 0
+    /// Human-readable stage label surfaced during a live scan.
+    @Published var scanStage: String = ""
     @Published var authorizationStatus: PHAuthorizationStatus = .notDetermined
 
     private let imageManager = PHCachingImageManager()
+
+    /// Laplacian-variance threshold below which a photo counts as blurry.
+    /// Measured on the 299×299 fast-format thumbnail we already fetch for the
+    /// feature print. Higher = stricter (flags more photos). Tune to taste.
+    private static let blurThreshold: Double = 55
 
     init() {
         checkAuthorization()
@@ -20,21 +29,25 @@ class PhotoService: ObservableObject {
         authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
     }
 
-    func requestAuthorization() async {
+    @discardableResult
+    func requestAuthorization() async -> PHAuthorizationStatus {
         let status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.authorizationStatus = status
         }
+        return status
     }
 
     func scanForSimilarAndDuplicatePhotos() async {
         guard authorizationStatus == .authorized || authorizationStatus == .limited else { return }
 
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.isScanning = true
             self.progress = 0
+            self.scanStage = "Preparing…"
             self.similarGroups = []
             self.duplicateGroups = []
+            self.blurryPhotos = []
         }
 
         let fetchOptions = PHFetchOptions()
@@ -42,72 +55,116 @@ class PhotoService: ObservableObject {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
         var fingerprints: [(asset: PHAsset, fingerprint: VNFeaturePrintObservation)] = []
+        var blurry: [PHAsset] = []
         let total = allPhotos.count
 
+        // Phase 1 — analyze each photo once: feature print (for similar/dup)
+        // and sharpness (for blur), reusing the same fetched thumbnail. 0 → 0.85.
         for i in 0..<total {
             let asset = allPhotos.object(at: i)
-            if let fingerprint = await getFingerprint(for: asset) {
+            let result = await analyzePhoto(for: asset)
+            if let fingerprint = result.fingerprint {
                 fingerprints.append((asset, fingerprint))
             }
+            if result.sharpness < Self.blurThreshold {
+                blurry.append(asset)
+            }
 
-            DispatchQueue.main.async {
-                self.progress = Double(i + 1) / Double(total)
+            let done = i + 1
+            await MainActor.run {
+                self.progress = Double(done) / Double(max(total, 1)) * 0.85
+                self.scanStage = "Analyzing photos \(done)/\(total)"
             }
         }
 
-        // Grouping logic
+        // Phase 2 — group by visual distance. 0.85 → 1.0.
+        //
+        // A naive all-pairs comparison is O(n²) and melts on large libraries.
+        // We avoid it with two facts about how near-duplicate photos occur:
+        //   1. Bucket by pixel dimensions — differently sized photos are never
+        //      near-duplicates, so we only ever compare within one bucket.
+        //   2. Sliding window inside each bucket — the fetch is date-sorted, and
+        //      bursts / same-scene shots sit next to each other in time, so we
+        //      only compare an anchor against the next `window` items.
+        // Cost drops from O(n²) to ~O(n · window).
+        let window = 20
+        let fpCount = fingerprints.count
+
+        var buckets: [String: [Int]] = [:]
+        for idx in 0..<fpCount {
+            let a = fingerprints[idx].asset
+            let key = "\(a.pixelWidth)x\(a.pixelHeight)"
+            buckets[key, default: []].append(idx)
+        }
+
         var similar: [PhotoGroup] = []
         var duplicates: [PhotoGroup] = []
-
-        // Simple hash-based duplicate detection (by duration/pixel size/etc as proxy or actual data)
-        // For real duplicates, we usually compare MD5 or exact pixel data.
-        // Here we'll use a very low distance threshold for Vision feature prints.
-
         var processedIndices = Set<Int>()
+        var anchorsDone = 0
 
-        for i in 0..<fingerprints.count {
-            if processedIndices.contains(i) { continue }
+        for (_, indices) in buckets {
+            for pos in 0..<indices.count {
+                let i = indices[pos]
+                anchorsDone += 1
+                if processedIndices.contains(i) { continue }
 
-            var currentGroup: [PHAsset] = [fingerprints[i].asset]
-            var isDuplicate = false
+                var currentGroup: [PHAsset] = [fingerprints[i].asset]
+                var isDuplicate = false
+                let upper = min(pos + window, indices.count)
 
-            for j in (i + 1)..<fingerprints.count {
-                if processedIndices.contains(j) { continue }
+                for q in (pos + 1)..<upper {
+                    let j = indices[q]
+                    if processedIndices.contains(j) { continue }
 
-                do {
-                    var distance: Float = 0
-                    try fingerprints[i].fingerprint.computeDistance(&distance, to: fingerprints[j].fingerprint)
+                    do {
+                        var distance: Float = 0
+                        try fingerprints[i].fingerprint.computeDistance(&distance, to: fingerprints[j].fingerprint)
 
-                    if distance < 1.0 { // Extremely similar = Duplicate
-                        currentGroup.append(fingerprints[j].asset)
-                        processedIndices.insert(j)
-                        isDuplicate = true
-                    } else if distance < 10.0 { // Visually similar
-                        currentGroup.append(fingerprints[j].asset)
-                        processedIndices.insert(j)
+                        if distance < 1.0 { // Extremely similar = Duplicate
+                            currentGroup.append(fingerprints[j].asset)
+                            processedIndices.insert(j)
+                            isDuplicate = true
+                        } else if distance < 10.0 { // Visually similar
+                            currentGroup.append(fingerprints[j].asset)
+                            processedIndices.insert(j)
+                        }
+                    } catch {
+                        print("Error: \(error)")
                     }
-                } catch {
-                    print("Error: \(error)")
                 }
-            }
 
-            if currentGroup.count > 1 {
-                if isDuplicate {
-                    duplicates.append(PhotoGroup(assets: currentGroup))
-                } else {
-                    similar.append(PhotoGroup(assets: currentGroup))
+                if currentGroup.count > 1 {
+                    if isDuplicate {
+                        duplicates.append(PhotoGroup(assets: currentGroup))
+                    } else {
+                        similar.append(PhotoGroup(assets: currentGroup))
+                    }
+                }
+
+                if fpCount > 0 && (anchorsDone % 25 == 0 || anchorsDone == fpCount) {
+                    let frac = Double(anchorsDone) / Double(fpCount)
+                    await MainActor.run {
+                        self.progress = 0.85 + frac * 0.15
+                        self.scanStage = "Grouping matches…"
+                    }
                 }
             }
         }
 
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.similarGroups = similar
             self.duplicateGroups = duplicates
+            self.blurryPhotos = blurry
+            self.progress = 1
+            self.scanStage = "Done"
             self.isScanning = false
         }
     }
 
-    private func getFingerprint(for asset: PHAsset) async -> VNFeaturePrintObservation? {
+    /// Fetches one thumbnail per asset and derives both the Vision feature
+    /// print and a sharpness score from it, so a full scan only touches each
+    /// photo once.
+    private func analyzePhoto(for asset: PHAsset) async -> (fingerprint: VNFeaturePrintObservation?, sharpness: Double) {
         return await withCheckedContinuation { continuation in
             let options = PHImageRequestOptions()
             options.isSynchronous = false
@@ -115,21 +172,71 @@ class PhotoService: ObservableObject {
 
             imageManager.requestImage(for: asset, targetSize: CGSize(width: 299, height: 299), contentMode: .aspectFill, options: options) { image, _ in
                 guard let image = image, let cgImage = image.cgImage else {
-                    continuation.resume(returning: nil)
+                    // Couldn't load — treat as sharp so we don't false-flag it.
+                    continuation.resume(returning: (nil, .greatestFiniteMagnitude))
                     return
                 }
+
+                let sharpness = self.laplacianVariance(of: cgImage)
 
                 let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
                 let request = VNGenerateImageFeaturePrintRequest()
 
                 do {
                     try requestHandler.perform([request])
-                    continuation.resume(returning: request.results?.first as? VNFeaturePrintObservation)
+                    continuation.resume(returning: (request.results?.first as? VNFeaturePrintObservation, sharpness))
                 } catch {
-                    continuation.resume(returning: nil)
+                    continuation.resume(returning: (nil, sharpness))
                 }
             }
         }
+    }
+
+    /// Variance of the Laplacian — a standard, real blur metric. The image is
+    /// drawn into a small grayscale buffer, a 4-neighbour Laplacian is applied,
+    /// and the variance of the response is returned. Sharp images have strong
+    /// high-frequency edges (high variance); blurry ones are flat (low variance).
+    private func laplacianVariance(of cgImage: CGImage) -> Double {
+        let side = 128
+        var pixels = [UInt8](repeating: 0, count: side * side)
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+
+        guard let ctx = CGContext(
+            data: &pixels,
+            width: side,
+            height: side,
+            bitsPerComponent: 8,
+            bytesPerRow: side,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.none.rawValue
+        ) else {
+            return .greatestFiniteMagnitude
+        }
+
+        ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: side, height: side))
+
+        var sum = 0.0
+        var sumSq = 0.0
+        var count = 0.0
+
+        for y in 1..<(side - 1) {
+            for x in 1..<(side - 1) {
+                let idx = y * side + x
+                let center = Double(pixels[idx])
+                let laplacian = 4 * center
+                    - Double(pixels[idx - side])
+                    - Double(pixels[idx + side])
+                    - Double(pixels[idx - 1])
+                    - Double(pixels[idx + 1])
+                sum += laplacian
+                sumSq += laplacian * laplacian
+                count += 1
+            }
+        }
+
+        guard count > 0 else { return .greatestFiniteMagnitude }
+        let mean = sum / count
+        return (sumSq / count) - (mean * mean)
     }
 
     func calculateSize(for assets: [PHAsset]) async -> Int64 {
