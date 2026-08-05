@@ -13,7 +13,6 @@ struct ContentView: View {
     @StateObject private var storageService = StorageService()
     @StateObject private var historyStore = CleanupHistoryStore()
     @State private var selectedTab = 1
-    @State private var videoSort: VideoSortOrder = .largestFirst
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -26,22 +25,9 @@ struct ContentView: View {
             .tag(0)
 
             NavigationStack {
-                VideoCompressionView(videoService: videoService, sortOrder: videoSort)
-                    .ignoresSafeArea(edges: .bottom)
+                VideoCompressionView(videoService: videoService)
                     .navigationTitle("Compress")
                     .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Menu {
-                                Picker("Sort", selection: $videoSort) {
-                                    Label("Largest first", systemImage: "arrow.down").tag(VideoSortOrder.largestFirst)
-                                    Label("Smallest first", systemImage: "arrow.up").tag(VideoSortOrder.smallestFirst)
-                                }
-                            } label: {
-                                Image(systemName: "arrow.up.arrow.down")
-                            }
-                        }
-                    }
             }
             .tabItem {
                 Label("Compress", systemImage: "rectangle.compress.vertical")

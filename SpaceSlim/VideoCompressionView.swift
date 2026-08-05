@@ -17,8 +17,8 @@ enum VideoSortOrder {
 /// batch. `sortOrder` is driven by the toolbar menu in `ContentView`.
 struct VideoCompressionView: View {
     @ObservedObject var videoService: VideoService
-    var sortOrder: VideoSortOrder = .largestFirst
 
+    @State private var sortOrder: VideoSortOrder = .largestFirst
     @State private var videos: [PHAsset] = []
     @State private var sizeCache: [String: Int64] = [:]
     @State private var selected: Set<String> = []
@@ -57,7 +57,7 @@ struct VideoCompressionView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
-                    .padding(.bottom, selected.isEmpty ? 96 : 190)
+                    .padding(.bottom, selected.isEmpty ? 96 : 120)
                 }
             }
 
@@ -68,9 +68,12 @@ struct VideoCompressionView: View {
         .onAppear { if !hasLoaded { fetch() } }
         .onChange(of: sortOrder) { _ in applySort() }
         .fullScreenCover(isPresented: $showOptions) {
-            CompressionOptionsView(videoService: videoService, assets: selectedAssets) { _, _, _ in
-                selected.removeAll()
-                fetch()
+            NavigationStack {
+                CompressionOptionsView(videoService: videoService, assets: selectedAssets) { _, _, _ in
+                    selected.removeAll()
+                    fetch()
+                    showOptions = false   // dismiss the whole presented flow back to the list
+                }
             }
         }
     }
@@ -107,20 +110,44 @@ struct VideoCompressionView: View {
 
             Spacer()
 
-            HStack(spacing: 4) {
-                Image(systemName: sortOrder == .largestFirst ? "arrow.down" : "arrow.up")
-                    .font(.system(size: 10, weight: .bold))
-                Text(sortOrder == .largestFirst ? "Largest" : "Smallest")
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-            }
-            .foregroundStyle(Color.ssViolet)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(Capsule().fill(Color.ssViolet.opacity(0.14)))
+            sortMenu
         }
         .padding(14)
         .glassCard(radius: 22)
         .padding(.bottom, 4)
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            Button {
+                sortOrder = .largestFirst
+            } label: {
+                Label("Largest first", systemImage: sortOrder == .largestFirst ? "checkmark" : "arrow.down.to.line")
+            }
+            Button {
+                sortOrder = .smallestFirst
+            } label: {
+                Label("Smallest first", systemImage: sortOrder == .smallestFirst ? "checkmark" : "arrow.up.to.line")
+            }
+        } label: {
+            HStack(spacing: 5) {
+                Image(systemName: sortOrder == .largestFirst ? "arrow.down" : "arrow.up")
+                    .font(.system(size: 10, weight: .heavy))
+                Text(sortOrder == .largestFirst ? "Largest" : "Smallest")
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 8, weight: .heavy))
+                    .opacity(0.7)
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 13)
+            .padding(.vertical, 9)
+            .background(
+                Capsule().fill(LinearGradient(colors: [.ssViolet, Color(red: 0.42, green: 0.38, blue: 0.9)],
+                                              startPoint: .topLeading, endPoint: .bottomTrailing))
+            )
+            .shadow(color: .ssViolet.opacity(0.35), radius: 6, y: 3)
+        }
     }
 
     private var emptyState: some View {
@@ -149,22 +176,25 @@ struct VideoCompressionView: View {
             Button {
                 showOptions = true
             } label: {
-                HStack(spacing: 10) {
+                HStack(spacing: 9) {
                     Image(systemName: "rectangle.compress.vertical")
                         .font(.system(size: 16, weight: .bold))
-                    Text("Compress \(selected.count) video\(selected.count == 1 ? "" : "s")")
+                    Text("Compress \(selected.count)")
                         .font(.system(size: 17, weight: .bold, design: .rounded))
-                    Spacer()
-                    HStack(spacing: 3) {
-                        Image(systemName: "arrow.down.circle.fill").font(.system(size: 12, weight: .bold))
+                        .lineLimit(1)
+                        .layoutPriority(1)
+                    Spacer(minLength: 8)
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.down.circle.fill").font(.system(size: 13, weight: .bold))
                         Text("save ~\(Self.sizeString(estimatedSavings))")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .monospacedDigit()
+                            .lineLimit(1)
                     }
-                    .opacity(0.92)
+                    .opacity(0.95)
                 }
                 .foregroundStyle(.white)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 22)
                 .frame(height: 58)
                 .frame(maxWidth: .infinity)
                 .background(
@@ -174,7 +204,7 @@ struct VideoCompressionView: View {
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 16)
-            .padding(.bottom, 88)   // clear the floating tab bar
+            .padding(.bottom, 10)   // sit just above the floating tab bar
         }
         .background(
             LinearGradient(colors: [.clear, Color.ssBackground.opacity(0.001)], startPoint: .top, endPoint: .bottom)
