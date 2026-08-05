@@ -1,7 +1,5 @@
 import SwiftUI
 import Photos
-import UIKit
-import Combine
 import AVFoundation
 
 // MARK: - Sort order
@@ -11,210 +9,196 @@ enum VideoSortOrder {
     case smallestFirst
 }
 
-// MARK: - SwiftUI bridge
+// MARK: - Compress tab
 
-/// UIKit-backed video compression list. Kept as a `UIViewControllerRepresentable`
-/// named `VideoCompressionView` so existing SwiftUI call sites (HomeView /
-/// ContentView) don't change.
-struct VideoCompressionView: UIViewControllerRepresentable {
+/// SwiftUI video-compression list, styled to match the home dashboard (glass
+/// cards, gradient accents, rounded type). Fetches every video, lets the user
+/// multi-select, then presents `CompressionOptionsView` full-screen to run the
+/// batch. `sortOrder` is driven by the toolbar menu in `ContentView`.
+struct VideoCompressionView: View {
     @ObservedObject var videoService: VideoService
     var sortOrder: VideoSortOrder = .largestFirst
 
-    func makeUIViewController(context: Context) -> VideoCompressionViewController {
-        let controller = VideoCompressionViewController(videoService: videoService)
-        controller.sortOrder = sortOrder
-        return controller
+    @State private var videos: [PHAsset] = []
+    @State private var sizeCache: [String: Int64] = [:]
+    @State private var selected: Set<String> = []
+    @State private var hasLoaded = false
+    @State private var showOptions = false
+
+    private var totalBytes: Int64 { videos.reduce(0) { $0 + (sizeCache[$1.localIdentifier] ?? 0) } }
+    private var selectedBytes: Int64 {
+        selected.reduce(0) { $0 + (sizeCache[$1] ?? 0) }
+    }
+    private var estimatedSavings: Int64 { Int64(Double(selectedBytes) * 0.5) }
+
+    private var selectedAssets: [PHAsset] {
+        videos.filter { selected.contains($0.localIdentifier) }
     }
 
-    func updateUIViewController(_ uiViewController: VideoCompressionViewController, context: Context) {
-        uiViewController.sortOrder = sortOrder
-    }
-}
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            HomeBackground()
 
-// MARK: - View controller
+            if hasLoaded && videos.isEmpty {
+                emptyState
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 12) {
+                        summaryCard
+                        ForEach(videos, id: \.localIdentifier) { asset in
+                            VideoRow(
+                                asset: asset,
+                                sizeText: Self.sizeString(sizeCache[asset.localIdentifier] ?? 0),
+                                isSelected: selected.contains(asset.localIdentifier)
+                            )
+                            .contentShape(Rectangle())
+                            .onTapGesture { toggle(asset) }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .padding(.bottom, selected.isEmpty ? 96 : 190)
+                }
+            }
 
-final class VideoCompressionViewController: UIViewController {
-    /// UserDefaults flag: whether the one-time "replace original" notice was shown.
-    private static let didWarnReplaceKey = "SpaceSlim.didWarnReplaceOriginal"
-
-    private let videoService: VideoService
-    private let tableView = UITableView(frame: .zero, style: .plain)
-    private let imageManager = PHCachingImageManager()
-    private var videos: [PHAsset] = []
-    private var sizeCache: [String: Int64] = [:]
-    private var selectedIDs = Set<String>()
-    private var cancellables = Set<AnyCancellable>()
-
-    var sortOrder: VideoSortOrder = .largestFirst {
-        didSet {
-            guard oldValue != sortOrder, isViewLoaded else { return }
-            applySort()
-            tableView.reloadData()
+            if !selected.isEmpty {
+                compressBar
+            }
+        }
+        .onAppear { if !hasLoaded { fetch() } }
+        .onChange(of: sortOrder) { _ in applySort() }
+        .fullScreenCover(isPresented: $showOptions) {
+            CompressionOptionsView(videoService: videoService, assets: selectedAssets) { _, _, _ in
+                selected.removeAll()
+                fetch()
+            }
         }
     }
 
-    // Bottom action bar with the single "Compress" button.
-    private let bottomBar = UIView()
-    private let compressButton = UIButton(type: .system)
+    // MARK: - Sections
 
-    // Loading overlay shown while exports run.
-    private let overlayView = UIView()
-    private let progressView = UIProgressView(progressViewStyle: .default)
-    private let progressLabel = UILabel()
-
-    // Empty-state label.
-    private let emptyLabel = UILabel()
-
-    init(videoService: VideoService) {
-        self.videoService = videoService
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "Video Compression"
-        view.backgroundColor = .systemGroupedBackground
-        setupBottomBar()
-        setupTableView()
-        setupEmptyState()
-        setupOverlay()
-        bind()
-        fetchVideos()
-        updateCompressButton()
-    }
-
-    private func setupBottomBar() {
-        bottomBar.translatesAutoresizingMaskIntoConstraints = false
-        bottomBar.backgroundColor = .secondarySystemBackground
-
-        let separator = UIView()
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        separator.backgroundColor = .separator
-        bottomBar.addSubview(separator)
-
-        compressButton.translatesAutoresizingMaskIntoConstraints = false
-        compressButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        var config = UIButton.Configuration.filled()
-        config.cornerStyle = .capsule
-        config.baseBackgroundColor = UIColor(red: 0.486, green: 0.435, blue: 0.941, alpha: 1) // ssViolet
-        config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 20)
-        compressButton.configuration = config
-        compressButton.addTarget(self, action: #selector(compressTapped), for: .touchUpInside)
-
-        bottomBar.addSubview(compressButton)
-        view.addSubview(bottomBar)
-
-        NSLayoutConstraint.activate([
-            bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            separator.topAnchor.constraint(equalTo: bottomBar.topAnchor),
-            separator.leadingAnchor.constraint(equalTo: bottomBar.leadingAnchor),
-            separator.trailingAnchor.constraint(equalTo: bottomBar.trailingAnchor),
-            separator.heightAnchor.constraint(equalToConstant: 0.5),
-
-            compressButton.topAnchor.constraint(equalTo: bottomBar.topAnchor, constant: 10),
-            compressButton.leadingAnchor.constraint(equalTo: bottomBar.leadingAnchor, constant: 16),
-            compressButton.trailingAnchor.constraint(equalTo: bottomBar.trailingAnchor, constant: -16),
-            compressButton.bottomAnchor.constraint(equalTo: bottomBar.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-        ])
-    }
-
-    private func setupTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.rowHeight = 84
-        tableView.allowsMultipleSelection = true
-        tableView.register(VideoCompressionCell.self, forCellReuseIdentifier: VideoCompressionCell.reuseID)
-        view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: bottomBar.topAnchor),
-        ])
-    }
-
-    private func setupEmptyState() {
-        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
-        emptyLabel.text = "No videos found"
-        emptyLabel.textColor = .secondaryLabel
-        emptyLabel.font = .preferredFont(forTextStyle: .body)
-        emptyLabel.isHidden = true
-        view.addSubview(emptyLabel)
-        NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-    }
-
-    private func setupOverlay() {
-        overlayView.translatesAutoresizingMaskIntoConstraints = false
-        overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        overlayView.isHidden = true
-
-        let card = UIView()
-        card.translatesAutoresizingMaskIntoConstraints = false
-        card.backgroundColor = .secondarySystemBackground
-        card.layer.cornerRadius = 14
-
-        progressView.translatesAutoresizingMaskIntoConstraints = false
-        progressLabel.translatesAutoresizingMaskIntoConstraints = false
-        progressLabel.text = "Compressing… 0%"
-        progressLabel.font = .preferredFont(forTextStyle: .subheadline)
-        progressLabel.textColor = .label
-        progressLabel.textAlignment = .center
-        progressLabel.numberOfLines = 0
-
-        card.addSubview(progressView)
-        card.addSubview(progressLabel)
-        overlayView.addSubview(card)
-        view.addSubview(overlayView)
-
-        NSLayoutConstraint.activate([
-            overlayView.topAnchor.constraint(equalTo: view.topAnchor),
-            overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            card.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
-            card.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor),
-            card.widthAnchor.constraint(equalToConstant: 260),
-
-            progressLabel.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
-            progressLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 20),
-            progressLabel.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -20),
-
-            progressView.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: 16),
-            progressView.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 20),
-            progressView.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -20),
-            progressView.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -20),
-        ])
-    }
-
-    /// Subscribe to the shared VideoService so the overlay tracks real export progress.
-    private func bind() {
-        videoService.$compressionProgress
-            .receive(on: RunLoop.main)
-            .sink { [weak self] progress in
-                self?.progressView.setProgress(Float(progress), animated: true)
+    private var summaryCard: some View {
+        HStack(spacing: 16) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .fill(LinearGradient(colors: [.ssViolet, Color(red: 0.298, green: 0.247, blue: 0.796)],
+                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 52, height: 52)
+                    .shadow(color: .ssViolet.opacity(0.4), radius: 8, y: 4)
+                Image(systemName: "film.stack")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(.white)
             }
-            .store(in: &cancellables)
+
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .firstTextBaseline, spacing: 5) {
+                    Text("\(videos.count)")
+                        .font(.system(size: 26, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(Color.ssTextPrimary)
+                    Text(videos.count == 1 ? "video" : "videos")
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Color.ssTextSecondary)
+                }
+                Text("\(Self.sizeString(totalBytes)) total")
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(Color.ssTextTertiary)
+            }
+
+            Spacer()
+
+            HStack(spacing: 4) {
+                Image(systemName: sortOrder == .largestFirst ? "arrow.down" : "arrow.up")
+                    .font(.system(size: 10, weight: .bold))
+                Text(sortOrder == .largestFirst ? "Largest" : "Smallest")
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
+            }
+            .foregroundStyle(Color.ssViolet)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Capsule().fill(Color.ssViolet.opacity(0.14)))
+        }
+        .padding(14)
+        .glassCard(radius: 22)
+        .padding(.bottom, 4)
     }
 
-    private func fetchVideos() {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+    private var emptyState: some View {
+        VStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(Color.ssViolet.opacity(0.14))
+                    .frame(width: 96, height: 96)
+                Image(systemName: "film.stack")
+                    .font(.system(size: 40, weight: .medium))
+                    .foregroundStyle(Color.ssViolet)
+            }
+            Text("No videos found")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.ssTextPrimary)
+            Text("Videos in your library will show up here,\nready to shrink without losing them.")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Color.ssTextTertiary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.bottom, 60)
+    }
+
+    private var compressBar: some View {
+        VStack(spacing: 0) {
+            Button {
+                showOptions = true
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: "rectangle.compress.vertical")
+                        .font(.system(size: 16, weight: .bold))
+                    Text("Compress \(selected.count) video\(selected.count == 1 ? "" : "s")")
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                    Spacer()
+                    HStack(spacing: 3) {
+                        Image(systemName: "arrow.down.circle.fill").font(.system(size: 12, weight: .bold))
+                        Text("save ~\(Self.sizeString(estimatedSavings))")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .monospacedDigit()
+                    }
+                    .opacity(0.92)
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 20)
+                .frame(height: 58)
+                .frame(maxWidth: .infinity)
+                .background(
+                    Capsule().fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .leading, endPoint: .trailing))
+                )
+                .shadow(color: .ssViolet.opacity(0.4), radius: 16, y: 8)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 88)   // clear the floating tab bar
+        }
+        .background(
+            LinearGradient(colors: [.clear, Color.ssBackground.opacity(0.001)], startPoint: .top, endPoint: .bottom)
+                .allowsHitTesting(false)
+        )
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: selected.isEmpty)
+    }
+
+    // MARK: - Actions
+
+    private func toggle(_ asset: PHAsset) {
+        let id = asset.localIdentifier
+        if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
+    }
+
+    private func fetch() {
+        DispatchQueue.global(qos: .userInitiated).async {
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let result = PHAsset.fetchAssets(with: .video, options: options)
             var assets: [PHAsset] = []
             result.enumerateObjects { asset, _, _ in assets.append(asset) }
 
-            // Pre-compute file sizes once so sorting/labels don't re-read metadata.
             var cache: [String: Int64] = [:]
             for asset in assets {
                 let resources = PHAssetResource.assetResources(for: asset)
@@ -222,16 +206,11 @@ final class VideoCompressionViewController: UIViewController {
             }
 
             DispatchQueue.main.async {
-                guard let self else { return }
                 self.sizeCache = cache
                 self.videos = assets
-                // Drop selections that no longer exist.
-                let existing = Set(assets.map(\.localIdentifier))
-                self.selectedIDs.formIntersection(existing)
+                self.selected.formIntersection(Set(assets.map(\.localIdentifier)))
                 self.applySort()
-                self.emptyLabel.isHidden = !assets.isEmpty
-                self.tableView.reloadData()
-                self.updateCompressButton()
+                self.hasLoaded = true
             }
         }
     }
@@ -244,297 +223,68 @@ final class VideoCompressionViewController: UIViewController {
         }
     }
 
-    private func updateCompressButton() {
-        let count = selectedIDs.count
-        compressButton.isEnabled = count > 0
-        compressButton.alpha = count > 0 ? 1 : 0.5
-        var config = compressButton.configuration
-        config?.title = count > 0 ? "Compress \(count) video\(count == 1 ? "" : "s")" : "Select videos to compress"
-        compressButton.configuration = config
-    }
+    // MARK: - Formatting
 
-    // MARK: - Compression flow
-
-    @objc private func compressTapped() {
-        guard !selectedIDs.isEmpty else { return }
-        promptCompression()
-    }
-
-    /// Step 1 — pick the resolution ratio.
-    private func promptCompression() {
-        let sheet = UIAlertController(
-            title: "Compression ratio",
-            message: "Lower keeps less detail but saves more space.",
-            preferredStyle: .actionSheet
-        )
-        let ratios: [(String, CGFloat)] = [
-            ("High quality · 90%", 0.9),
-            ("Balanced · 70%", 0.7),
-            ("Small size · 50%", 0.5),
-        ]
-        for (title, scale) in ratios {
-            sheet.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
-                self?.promptFrameRate(scale: scale)
-            })
-        }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        presentSheet(sheet)
-    }
-
-    /// Step 2 — pick the frame rate.
-    private func promptFrameRate(scale: CGFloat) {
-        let sheet = UIAlertController(title: "Frame rate", message: nil, preferredStyle: .actionSheet)
-        let options: [(String, Int?)] = [
-            ("Keep original", nil),
-            ("30 fps", 30),
-            ("24 fps", 24),
-            ("15 fps", 15),
-        ]
-        for (title, fps) in options {
-            sheet.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
-                self?.promptDisposition(scale: scale, frameRate: fps)
-            })
-        }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        presentSheet(sheet)
-    }
-
-    /// Step 3 — keep the originals, or replace them with the compressed copies.
-    private func promptDisposition(scale: CGFloat, frameRate: Int?) {
-        let sheet = UIAlertController(
-            title: "Original videos",
-            message: "Keep the originals, or replace them with the compressed copies?",
-            preferredStyle: .actionSheet
-        )
-        sheet.addAction(UIAlertAction(title: "Keep originals", style: .default) { [weak self] _ in
-            self?.runBatch(scale: scale, frameRate: frameRate, replaceOriginal: false)
-        })
-        sheet.addAction(UIAlertAction(title: "Replace originals", style: .destructive) { [weak self] _ in
-            self?.confirmReplaceIfNeeded(scale: scale, frameRate: frameRate)
-        })
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        presentSheet(sheet)
-    }
-
-    /// One-time notice the first time the user chooses to replace originals.
-    private func confirmReplaceIfNeeded(scale: CGFloat, frameRate: Int?) {
-        if UserDefaults.standard.bool(forKey: Self.didWarnReplaceKey) {
-            runBatch(scale: scale, frameRate: frameRate, replaceOriginal: true)
-            return
-        }
-        let alert = UIAlertController(
-            title: "Replace originals?",
-            message: "Each original video will be deleted from Photos after its compressed copy is saved. This notice is shown only once.",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Continue", style: .destructive) { [weak self] _ in
-            UserDefaults.standard.set(true, forKey: Self.didWarnReplaceKey)
-            self?.runBatch(scale: scale, frameRate: frameRate, replaceOriginal: true)
-        })
-        present(alert, animated: true)
-    }
-
-    private func runBatch(scale: CGFloat, frameRate: Int?, replaceOriginal: Bool) {
-        let targets = videos.filter { selectedIDs.contains($0.localIdentifier) }
-        guard !targets.isEmpty else { return }
-
-        overlayView.isHidden = false
-        Task {
-            var okCount = 0
-            for (index, asset) in targets.enumerated() {
-                await MainActor.run {
-                    self.progressLabel.text = "Compressing \(index + 1) of \(targets.count)…"
-                    self.progressView.setProgress(0, animated: false)
-                }
-                let success = await videoService.compressVideo(asset: asset, scale: scale, frameRate: frameRate)
-                if success {
-                    okCount += 1
-                    if replaceOriginal { _ = await videoService.deleteVideo(asset: asset) }
-                }
-            }
-
-            await MainActor.run {
-                self.overlayView.isHidden = true
-                self.selectedIDs.removeAll()
-                self.fetchVideos()
-                self.showBatchResult(okCount: okCount, total: targets.count, replaced: replaceOriginal)
-            }
-        }
-    }
-
-    private func showBatchResult(okCount: Int, total: Int, replaced: Bool) {
-        let title = okCount == total ? "Done" : (okCount == 0 ? "Failed" : "Partly done")
-        var message = "\(okCount) of \(total) video\(total == 1 ? "" : "s") compressed and saved to Photos."
-        if replaced && okCount > 0 { message += " Originals removed." }
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-
-    /// Anchors action sheets for iPad/regular-width presentation.
-    private func presentSheet(_ sheet: UIAlertController) {
-        if let popover = sheet.popoverPresentationController {
-            popover.sourceView = compressButton
-            popover.sourceRect = compressButton.bounds
-        }
-        present(sheet, animated: true)
+    static func sizeString(_ bytes: Int64) -> String {
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .file
+        formatter.allowsNonnumericFormatting = false
+        return formatter.string(fromByteCount: bytes)
     }
 }
 
-// MARK: - Data source / delegate
+// MARK: - Row
 
-extension VideoCompressionViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        videos.count
-    }
+private struct VideoRow: View {
+    let asset: PHAsset
+    let sizeText: String
+    let isSelected: Bool
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: VideoCompressionCell.reuseID, for: indexPath) as! VideoCompressionCell
-        let asset = videos[indexPath.row]
-        cell.configure(with: asset, imageManager: imageManager, isSelected: selectedIDs.contains(asset.localIdentifier))
-        return cell
-    }
+    var body: some View {
+        HStack(spacing: 13) {
+            VideoThumbnail(asset: asset)
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        let asset = videos[indexPath.row]
-        let id = asset.localIdentifier
-        if selectedIDs.contains(id) {
-            selectedIDs.remove(id)
-        } else {
-            selectedIDs.insert(id)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Video · \(Self.durationString(asset.duration))")
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Color.ssTextPrimary)
+                    .lineLimit(1)
+                if let date = asset.creationDate {
+                    Text(Self.dateFormatter.string(from: date))
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.ssTextTertiary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer(minLength: 8)
+
+            Text(sizeText)
+                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(Color.ssTextSecondary)
+
+            ZStack {
+                Circle()
+                    .strokeBorder(isSelected ? Color.clear : Color.ssTextTertiary.opacity(0.5), lineWidth: 1.8)
+                    .frame(width: 24, height: 24)
+                if isSelected {
+                    Circle()
+                        .fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .frame(width: 24, height: 24)
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 12, weight: .heavy))
+                        .foregroundStyle(.white)
+                }
+            }
         }
-        if let cell = tableView.cellForRow(at: indexPath) as? VideoCompressionCell {
-            cell.setChecked(selectedIDs.contains(id))
-        }
-        updateCompressButton()
+        .padding(12)
+        .glassCard(radius: 18, tint: isSelected ? .ssViolet : .clear)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(isSelected ? Color.ssViolet.opacity(0.7) : Color.clear, lineWidth: 1.8)
+        )
     }
-}
-
-// MARK: - Cell
-
-final class VideoCompressionCell: UITableViewCell {
-    static let reuseID = "VideoCompressionCell"
-
-    private let thumbnailView = UIImageView()
-    private let durationBadge = UILabel()
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
-    private let checkmark = UIImageView()
-
-    private var representedAssetID: String?
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUI()
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    private func setupUI() {
-        selectionStyle = .none
-
-        thumbnailView.translatesAutoresizingMaskIntoConstraints = false
-        thumbnailView.contentMode = .scaleAspectFill
-        thumbnailView.clipsToBounds = true
-        thumbnailView.layer.cornerRadius = 8
-        thumbnailView.backgroundColor = .tertiarySystemFill
-
-        durationBadge.translatesAutoresizingMaskIntoConstraints = false
-        durationBadge.font = .systemFont(ofSize: 10, weight: .semibold)
-        durationBadge.textColor = .white
-        durationBadge.textAlignment = .center
-        durationBadge.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        durationBadge.layer.cornerRadius = 4
-        durationBadge.clipsToBounds = true
-
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .preferredFont(forTextStyle: .subheadline)
-        titleLabel.textColor = .label
-
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subtitleLabel.font = .preferredFont(forTextStyle: .caption1)
-        subtitleLabel.textColor = .secondaryLabel
-
-        checkmark.translatesAutoresizingMaskIntoConstraints = false
-        checkmark.contentMode = .scaleAspectFit
-        checkmark.tintColor = UIColor(red: 0.486, green: 0.435, blue: 0.941, alpha: 1) // ssViolet
-        checkmark.setContentHuggingPriority(.required, for: .horizontal)
-
-        contentView.addSubview(thumbnailView)
-        thumbnailView.addSubview(durationBadge)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(subtitleLabel)
-        contentView.addSubview(checkmark)
-
-        NSLayoutConstraint.activate([
-            thumbnailView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            thumbnailView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            thumbnailView.widthAnchor.constraint(equalToConstant: 60),
-            thumbnailView.heightAnchor.constraint(equalToConstant: 60),
-
-            durationBadge.trailingAnchor.constraint(equalTo: thumbnailView.trailingAnchor, constant: -3),
-            durationBadge.bottomAnchor.constraint(equalTo: thumbnailView.bottomAnchor, constant: -3),
-            durationBadge.heightAnchor.constraint(equalToConstant: 15),
-            durationBadge.widthAnchor.constraint(greaterThanOrEqualToConstant: 30),
-
-            titleLabel.leadingAnchor.constraint(equalTo: thumbnailView.trailingAnchor, constant: 12),
-            titleLabel.topAnchor.constraint(equalTo: thumbnailView.topAnchor, constant: 6),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: checkmark.leadingAnchor, constant: -8),
-
-            subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            subtitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: checkmark.leadingAnchor, constant: -8),
-
-            checkmark.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            checkmark.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            checkmark.widthAnchor.constraint(equalToConstant: 24),
-            checkmark.heightAnchor.constraint(equalToConstant: 24),
-        ])
-    }
-
-    func configure(with asset: PHAsset, imageManager: PHCachingImageManager, isSelected: Bool) {
-        representedAssetID = asset.localIdentifier
-
-        titleLabel.text = "Video · \(Self.durationString(asset.duration))"
-        let sizeText = Self.sizeString(for: asset)
-        if let date = asset.creationDate {
-            subtitleLabel.text = "\(sizeText) · \(Self.dateFormatter.string(from: date))"
-        } else {
-            subtitleLabel.text = sizeText
-        }
-        durationBadge.text = " \(Self.durationString(asset.duration)) "
-        setChecked(isSelected)
-
-        thumbnailView.image = nil
-        let targetSize = CGSize(width: 120, height: 120)
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .opportunistic
-        options.isNetworkAccessAllowed = true
-
-        let assetID = asset.localIdentifier
-        imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak self] image, _ in
-            guard let self, self.representedAssetID == assetID else { return }
-            self.thumbnailView.image = image
-        }
-    }
-
-    func setChecked(_ checked: Bool) {
-        let name = checked ? "checkmark.circle.fill" : "circle"
-        checkmark.image = UIImage(systemName: name)
-        checkmark.tintColor = checked
-            ? UIColor(red: 0.486, green: 0.435, blue: 0.941, alpha: 1)
-            : .tertiaryLabel
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        thumbnailView.image = nil
-        representedAssetID = nil
-    }
-
-    // MARK: Formatting helpers
 
     private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -545,17 +295,56 @@ final class VideoCompressionCell: UITableViewCell {
 
     private static func durationString(_ duration: TimeInterval) -> String {
         let total = Int(duration.rounded())
-        let minutes = total / 60
-        let seconds = total % 60
-        return String(format: "%d:%02d", minutes, seconds)
+        return String(format: "%d:%02d", total / 60, total % 60)
+    }
+}
+
+// MARK: - Thumbnail
+
+/// Async photo-library thumbnail with a duration/play overlay.
+private struct VideoThumbnail: View {
+    let asset: PHAsset
+    @State private var image: UIImage?
+
+    private static let manager = PHCachingImageManager()
+
+    var body: some View {
+        ZStack {
+            if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Rectangle().fill(Color.ssTrack)
+            }
+
+            Image(systemName: "play.fill")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 26, height: 26)
+                .background(Circle().fill(Color.black.opacity(0.35)))
+        }
+        .frame(width: 64, height: 64)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
+        )
+        .onAppear(perform: load)
     }
 
-    private static func sizeString(for asset: PHAsset) -> String {
-        let resources = PHAssetResource.assetResources(for: asset)
-        let bytes = resources.first?.value(forKey: "fileSize") as? Int64 ?? 0
-        let formatter = ByteCountFormatter()
-        formatter.countStyle = .file
-        formatter.allowsNonnumericFormatting = false
-        return formatter.string(fromByteCount: bytes)
+    private func load() {
+        guard image == nil else { return }
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .opportunistic
+        options.isNetworkAccessAllowed = true
+        let id = asset.localIdentifier
+        Self.manager.requestImage(for: asset,
+                                  targetSize: CGSize(width: 160, height: 160),
+                                  contentMode: .aspectFill,
+                                  options: options) { result, _ in
+            guard asset.localIdentifier == id, let result else { return }
+            self.image = result
+        }
     }
 }

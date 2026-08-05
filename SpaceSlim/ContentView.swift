@@ -12,7 +12,7 @@ struct ContentView: View {
     @StateObject private var videoService = VideoService()
     @StateObject private var storageService = StorageService()
     @StateObject private var historyStore = CleanupHistoryStore()
-    @State private var selectedTab = 0
+    @State private var selectedTab = 1
     @State private var videoSort: VideoSortOrder = .largestFirst
 
     var body: some View {

@@ -46,10 +46,10 @@ struct HomeView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            Color.ssBackground.ignoresSafeArea()
+            HomeBackground()
 
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 18) {
+                VStack(spacing: 20) {
                     header
                     DashboardCard(
                         compressibleBytes: compressibleBytes,
@@ -69,7 +69,7 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
-                .padding(.bottom, 40)
+                .padding(.bottom, 110)
             }
 
             if showFreedToast {
@@ -108,62 +108,81 @@ struct HomeView: View {
     // MARK: - Sections
 
     private var header: some View {
-        HStack {
+        HStack(spacing: 10) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 34, height: 34)
+                    .shadow(color: .ssViolet.opacity(0.35), radius: 6, y: 3)
+                Image(systemName: "sparkles")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+
             Text("SpaceSlim")
-                .font(.system(size: 22, weight: .bold))
+                .font(.system(size: 24, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.ssTextPrimary)
+
             Spacer()
 
             if isScanning {
                 HStack(spacing: 6) {
-                    ProgressView().scaleEffect(0.8)
+                    ProgressView().scaleEffect(0.7)
                     Text(photoService.isScanning ? "\(scanPercent)%" : "Scanning…")
-                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .monospacedDigit()
                         .foregroundStyle(Color.ssViolet)
                 }
                 .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(Capsule().fill(Color.ssViolet.opacity(0.12)))
+                .padding(.vertical, 5)
+                .background(Capsule().fill(Color.ssViolet.opacity(0.14)))
             }
 
             Button {
                 showHistory = true
             } label: {
                 Image(systemName: "clock.arrow.circlepath")
-                    .font(.system(size: 16))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(Color.ssTextSecondary)
-                    .frame(width: 36, height: 36)
+                    .frame(width: 38, height: 38)
                     .background(Circle().fill(.ultraThinMaterial))
+                    .overlay(Circle().strokeBorder(Color.white.opacity(0.35), lineWidth: 1))
             }
         }
     }
 
     private var valueProp: some View {
-        VStack(spacing: 4) {
-            Text("Compress to keep memories · Clean to remove junk")
-                .font(.system(size: 12, weight: .semibold))
+        HStack(spacing: 7) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(Color.ssTeal)
+            Text("100% on-device")
+                .font(.system(size: 12, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.ssTextSecondary)
-            HStack(spacing: 6) {
-                Image(systemName: "lock.fill").font(.system(size: 10))
-                Text("100% on-device · No account, no uploads")
-                    .font(.system(size: 11, weight: .medium))
-            }
-            .foregroundStyle(Color.ssTextTertiary)
+            Text("·  No account, no uploads")
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(Color.ssTextTertiary)
         }
-        .multilineTextAlignment(.center)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 9)
+        .background(Capsule().fill(.ultraThinMaterial))
+        .overlay(Capsule().strokeBorder(Color.white.opacity(0.3), lineWidth: 1))
+        .frame(maxWidth: .infinity)
     }
 
     private var categoriesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .lastTextBaseline) {
-                Text("CLEAN UP BY CATEGORY")
-                    .font(.system(size: 13, weight: .semibold))
-                    .tracking(0.6)
-                    .foregroundStyle(Color.ssTextTertiary)
+            HStack(alignment: .firstTextBaseline) {
+                Text("Clean up by category")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.ssTextPrimary)
                 Spacer()
-                Text("tap to review")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.ssTeal)
+                HStack(spacing: 3) {
+                    Text("Tap to review")
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    Image(systemName: "chevron.right").font(.system(size: 9, weight: .bold))
+                }
+                .foregroundStyle(Color.ssTeal)
             }
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
@@ -201,19 +220,21 @@ struct HomeView: View {
                         .font(.system(size: 18, weight: .medium))
                         .foregroundStyle(.white)
                 }
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("Video compression")
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.ssTextPrimary)
                     Text("Shrink large videos, keep the quality")
-                        .font(.system(size: 12))
+                        .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.ssTextSecondary)
                         .lineLimit(1)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(Color.ssTextTertiary)
+                    .frame(width: 30, height: 30)
+                    .background(Circle().fill(Color.ssTextTertiary.opacity(0.12)))
             }
             .padding(16)
             .glassCard(radius: 24)
@@ -458,51 +479,63 @@ struct DashboardCard: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 22) {
             ZStack {
-                Circle().stroke(Color.ssTrack, lineWidth: 16)
+                Circle().stroke(Color.ssTrack, lineWidth: 18)
                 Circle()
-                    .trim(from: 0, to: CGFloat(percentUsed))
+                    .trim(from: 0, to: CGFloat(min(max(percentUsed, 0), 1)))
                     .stroke(
-                        AngularGradient(colors: [.ssViolet, .ssTeal], center: .center),
-                        style: StrokeStyle(lineWidth: 16, lineCap: .round)
+                        AngularGradient(
+                            gradient: Gradient(colors: [.ssTeal, .ssViolet, .ssPink, .ssTeal]),
+                            center: .center
+                        ),
+                        style: StrokeStyle(lineWidth: 18, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
-                    .shadow(color: .ssViolet.opacity(0.4), radius: 8)
+                    .shadow(color: .ssViolet.opacity(0.45), radius: 10)
 
-                VStack(spacing: 4) {
+                VStack(spacing: 5) {
                     Text("RECLAIMABLE")
-                        .font(.system(size: 12, weight: .bold))
-                        .tracking(1)
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .tracking(1.5)
                         .foregroundStyle(Color.ssTextTertiary)
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(parts(totalReclaimable).value)
-                            .font(.system(size: 46, weight: .bold, design: .monospaced))
-                            .foregroundStyle(Color.ssTextPrimary)
+                            .font(.system(size: 52, weight: .bold, design: .rounded))
+                            .foregroundStyle(
+                                LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            )
                         Text(parts(totalReclaimable).unit)
-                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .font(.system(size: 19, weight: .bold, design: .rounded))
                             .foregroundStyle(Color.ssTextSecondary)
                     }
-                    Text("\(Int(usedGB)) GB used of \(Int(totalGB)) GB")
-                        .font(.system(size: 12, design: .monospaced))
-                        .foregroundStyle(Color.ssTextTertiary)
+                    HStack(spacing: 5) {
+                        Circle().fill(Color.ssViolet).frame(width: 6, height: 6)
+                        Text("\(Int(usedGB)) GB used of \(Int(totalGB)) GB")
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color.ssTextTertiary)
+                    }
                 }
             }
-            .frame(width: 210, height: 210)
+            .frame(width: 214, height: 214)
 
             if accessDenied {
                 VStack(spacing: 8) {
                     Button(action: onEnableAccess) {
-                        Text("Enable Photo Access")
-                            .font(.system(size: 17, weight: .bold))
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(Capsule().fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .leading, endPoint: .trailing)))
+                        HStack(spacing: 8) {
+                            Image(systemName: "photo.stack.fill").font(.system(size: 15, weight: .bold))
+                            Text("Enable Photo Access")
+                                .font(.system(size: 17, weight: .bold, design: .rounded))
+                        }
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(Capsule().fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .leading, endPoint: .trailing)))
+                        .shadow(color: .ssViolet.opacity(0.35), radius: 12, y: 6)
                     }
                     .buttonStyle(.plain)
                     Text("SpaceSlim needs photo access to scan your library.")
-                        .font(.system(size: 12))
+                        .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.ssTextTertiary)
                         .multilineTextAlignment(.center)
                 }
@@ -510,7 +543,8 @@ struct DashboardCard: View {
                 HStack(spacing: 8) {
                     ProgressView()
                     Text("Scanning \(scanPercent)%")
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                        .monospacedDigit()
                         .foregroundStyle(Color.ssTextSecondary)
                 }
                 .frame(height: 60)
@@ -558,31 +592,35 @@ struct ActionPill: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 4) {
+            VStack(spacing: 5) {
                 Image(systemName: icon)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 17, weight: .bold))
+                    .frame(width: 34, height: 34)
+                    .background(Circle().fill(.white.opacity(0.2)))
+                    .padding(.bottom, 2)
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text(amount.value)
-                        .font(.system(size: 22, weight: .bold, design: .monospaced))
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .monospacedDigit()
                     Text(amount.unit)
-                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
                 }
                 Text(title)
-                    .font(.system(size: 13, weight: .bold))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                 Text(subtitle)
-                    .font(.system(size: 10, weight: .medium))
-                    .opacity(0.85)
+                    .font(.system(size: 10, weight: .semibold))
+                    .opacity(0.9)
             }
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
+            .padding(.vertical, 16)
             .background(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(LinearGradient(
                         colors: enabled ? colors : [Color.ssTextTertiary.opacity(0.4), Color.ssTextTertiary.opacity(0.4)],
                         startPoint: .topLeading, endPoint: .bottomTrailing))
             )
-            .shadow(color: enabled ? colors[0].opacity(0.35) : .clear, radius: 10, y: 6)
+            .shadow(color: enabled ? colors[0].opacity(0.4) : .clear, radius: 12, y: 7)
         }
         .buttonStyle(.plain)
         .disabled(!enabled)
@@ -599,29 +637,39 @@ struct CategoryChip: View {
     let sizeText: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(LinearGradient(colors: [color, color.opacity(0.75)], startPoint: .topLeading, endPoint: .bottomTrailing))
-                    .frame(width: 40, height: 40)
-                Image(systemName: icon)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(.white)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 13, style: .continuous)
+                        .fill(LinearGradient(colors: [color, color.opacity(0.72)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .frame(width: 44, height: 44)
+                        .shadow(color: color.opacity(0.4), radius: 6, y: 3)
+                    Image(systemName: icon)
+                        .font(.system(size: 19, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+                Spacer()
+                Text(sizeText)
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .foregroundStyle(color)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 5)
+                    .background(Capsule().fill(color.opacity(0.16)))
             }
-            Spacer(minLength: 8)
+
+            Spacer(minLength: 14)
+
             Text("\(count)")
-                .font(.system(size: 24, weight: .bold, design: .monospaced))
+                .font(.system(size: 30, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.ssTextPrimary)
+                .monospacedDigit()
             Text(title)
-                .font(.system(size: 13, weight: .medium))
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.ssTextSecondary)
                 .lineLimit(1)
-            Text(sizeText)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .foregroundStyle(Color.ssTextTertiary)
         }
-        .padding(14)
-        .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+        .padding(16)
+        .frame(maxWidth: .infinity, minHeight: 138, alignment: .topLeading)
         .glassCard(radius: 22, tint: color)
     }
 }
@@ -643,9 +691,15 @@ struct GlassCard: ViewModifier {
             .background(glassBackground)
             .overlay(
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
-                    .strokeBorder(Color.white.opacity(colorScheme == .dark ? 0.18 : 0.35), lineWidth: 1)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [Color.white.opacity(colorScheme == .dark ? 0.28 : 0.85),
+                                     Color.white.opacity(colorScheme == .dark ? 0.05 : 0.2)],
+                            startPoint: .topLeading, endPoint: .bottomTrailing),
+                        lineWidth: 1)
             )
-            .shadow(color: .black.opacity(colorScheme == .dark ? 0.22 : 0.10), radius: 18, x: 0, y: 8)
+            .shadow(color: (colorScheme == .dark ? Color.black : tint == .clear ? Color.ssViolet : tint).opacity(colorScheme == .dark ? 0.35 : 0.14),
+                    radius: 20, x: 0, y: 10)
     }
 
     @ViewBuilder
@@ -654,8 +708,13 @@ struct GlassCard: ViewModifier {
 
         if #available(iOS 17.0, *) {
             ZStack {
+                shape.fill(Color.ssCardSolid.opacity(colorScheme == .dark ? 0.55 : 0.65))
                 shape.fill(.ultraThinMaterial)
-                shape.fill(tint.opacity(0.12))
+                shape.fill(
+                    LinearGradient(
+                        colors: [Color.white.opacity(colorScheme == .dark ? 0.08 : 0.5), .clear],
+                        startPoint: .topLeading, endPoint: .center))
+                shape.fill(tint.opacity(colorScheme == .dark ? 0.16 : 0.13))
             }
         } else {
             ZStack {
@@ -676,6 +735,40 @@ struct GlassCard: ViewModifier {
 extension View {
     func glassCard(radius: CGFloat = 24, tint: Color = .clear) -> some View {
         modifier(GlassCard(radius: radius, tint: tint))
+    }
+}
+
+// MARK: - Background
+
+/// Layered app background: a soft vertical wash plus two blurred color glows so
+/// the glass cards have something to refract instead of sitting on a flat fill.
+struct HomeBackground: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        ZStack {
+            Color.ssBackground
+
+            LinearGradient(
+                colors: [Color.ssViolet.opacity(colorScheme == .dark ? 0.16 : 0.10), .clear],
+                startPoint: .top, endPoint: .center)
+
+            GeometryReader { geo in
+                ZStack {
+                    Circle()
+                        .fill(Color.ssViolet.opacity(colorScheme == .dark ? 0.30 : 0.22))
+                        .frame(width: geo.size.width * 0.9)
+                        .blur(radius: 90)
+                        .offset(x: -geo.size.width * 0.28, y: -geo.size.height * 0.08)
+                    Circle()
+                        .fill(Color.ssTeal.opacity(colorScheme == .dark ? 0.22 : 0.18))
+                        .frame(width: geo.size.width * 0.8)
+                        .blur(radius: 90)
+                        .offset(x: geo.size.width * 0.34, y: geo.size.height * 0.02)
+                }
+            }
+        }
+        .ignoresSafeArea()
     }
 }
 

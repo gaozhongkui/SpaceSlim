@@ -59,27 +59,30 @@ class VideoService: ObservableObject {
     /// Uses an AVAssetReader → AVAssetWriter transcode so we can control the
     /// exact output size, frame rate (by dropping frames) and bitrate — none of
     /// which the fixed export presets allow. Returns whether it succeeded.
+    /// Compresses the video and saves it back to Photos. Returns the compressed
+    /// output size in bytes on success, or nil on failure.
     @discardableResult
-    func compressVideo(asset: PHAsset, scale: CGFloat, frameRate: Int?) async -> Bool {
+    func compressVideo(asset: PHAsset, scale: CGFloat, frameRate: Int?) async -> Int64? {
         await MainActor.run {
             self.isCompressing = true
             self.compressionProgress = 0
         }
 
-        let ok: Bool
+        var outputBytes: Int64?
         if let avAsset = await requestAVAsset(for: asset),
            let outputURL = await transcode(avAsset: avAsset, scale: scale, frameRate: frameRate) {
-            ok = await saveToPhotoLibrary(url: outputURL)
+            let attrs = try? FileManager.default.attributesOfItem(atPath: outputURL.path)
+            let size = (attrs?[.size] as? NSNumber)?.int64Value ?? 0
+            let saved = await saveToPhotoLibrary(url: outputURL)
             try? FileManager.default.removeItem(at: outputURL)
-        } else {
-            ok = false
+            if saved { outputBytes = size }
         }
 
         await MainActor.run {
             self.isCompressing = false
-            self.compressionProgress = ok ? 1 : 0
+            self.compressionProgress = outputBytes != nil ? 1 : 0
         }
-        return ok
+        return outputBytes
     }
 
     private func requestAVAsset(for asset: PHAsset) async -> AVAsset? {
