@@ -8,6 +8,8 @@ class PhotoService: ObservableObject {
     @Published var similarGroups: [PhotoGroup] = []
     @Published var duplicateGroups: [PhotoGroup] = []
     @Published var blurryPhotos: [PHAsset] = []
+    /// Photos that contain at least one detected face (people / portraits).
+    @Published var portraitPhotos: [PHAsset] = []
     @Published var isScanning = false
     @Published var progress: Double = 0
     /// Human-readable stage label surfaced during a live scan.
@@ -51,6 +53,7 @@ class PhotoService: ObservableObject {
             self.similarGroups = []
             self.duplicateGroups = []
             self.blurryPhotos = []
+            self.portraitPhotos = []
         }
 
         let fetchOptions = PHFetchOptions()
@@ -59,11 +62,13 @@ class PhotoService: ObservableObject {
 
         var fingerprints: [(asset: PHAsset, fingerprint: VNFeaturePrintObservation)] = []
         var blurry: [PHAsset] = []
+        var portraits: [PHAsset] = []
         let total = allPhotos.count
         let threshold = blurThreshold
 
-        // Phase 1 — analyze each photo once: feature print (for similar/dup)
-        // and sharpness (for blur), reusing the same fetched thumbnail. 0 → 0.85.
+        // Phase 1 — analyze each photo once: feature print (for similar/dup),
+        // sharpness (for blur) and face presence (for portraits), all reusing
+        // the same fetched thumbnail. 0 → 0.85.
         for i in 0..<total {
             let asset = allPhotos.object(at: i)
             let result = await analyzePhoto(for: asset)
@@ -72,6 +77,9 @@ class PhotoService: ObservableObject {
             }
             if result.sharpness < threshold {
                 blurry.append(asset)
+            }
+            if result.hasFace {
+                portraits.append(asset)
             }
 
             let done = i + 1
@@ -159,16 +167,17 @@ class PhotoService: ObservableObject {
             self.similarGroups = similar
             self.duplicateGroups = duplicates
             self.blurryPhotos = blurry
+            self.portraitPhotos = portraits
             self.progress = 1
             self.scanStage = "Done"
             self.isScanning = false
         }
     }
 
-    /// Fetches one thumbnail per asset and derives both the Vision feature
-    /// print and a sharpness score from it, so a full scan only touches each
-    /// photo once.
-    private func analyzePhoto(for asset: PHAsset) async -> (fingerprint: VNFeaturePrintObservation?, sharpness: Double) {
+    /// Fetches one thumbnail per asset and derives the Vision feature print
+    /// (similar/dup), a sharpness score (blur) and whether it contains a face
+    /// (portraits) from it, so a full scan only touches each photo once.
+    private func analyzePhoto(for asset: PHAsset) async -> (fingerprint: VNFeaturePrintObservation?, sharpness: Double, hasFace: Bool) {
         return await withCheckedContinuation { continuation in
             let options = PHImageRequestOptions()
             options.isSynchronous = false
@@ -177,20 +186,22 @@ class PhotoService: ObservableObject {
             imageManager.requestImage(for: asset, targetSize: CGSize(width: 299, height: 299), contentMode: .aspectFill, options: options) { image, _ in
                 guard let image = image, let cgImage = image.cgImage else {
                     // Couldn't load — treat as sharp so we don't false-flag it.
-                    continuation.resume(returning: (nil, .greatestFiniteMagnitude))
+                    continuation.resume(returning: (nil, .greatestFiniteMagnitude, false))
                     return
                 }
 
                 let sharpness = self.laplacianVariance(of: cgImage)
 
                 let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-                let request = VNGenerateImageFeaturePrintRequest()
+                let featurePrint = VNGenerateImageFeaturePrintRequest()
+                let faceRequest = VNDetectFaceRectanglesRequest()
 
                 do {
-                    try requestHandler.perform([request])
-                    continuation.resume(returning: (request.results?.first as? VNFeaturePrintObservation, sharpness))
+                    try requestHandler.perform([featurePrint, faceRequest])
+                    let hasFace = !((faceRequest.results as? [VNFaceObservation])?.isEmpty ?? true)
+                    continuation.resume(returning: (featurePrint.results?.first as? VNFeaturePrintObservation, sharpness, hasFace))
                 } catch {
-                    continuation.resume(returning: (nil, sharpness))
+                    continuation.resume(returning: (nil, sharpness, false))
                 }
             }
         }

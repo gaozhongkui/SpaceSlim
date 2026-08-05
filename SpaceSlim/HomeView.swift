@@ -26,6 +26,7 @@ struct HomeView: View {
     @State private var recommendedBytes: Int64 = 0
     @State private var compressibleBytes: Int64 = 0
     @State private var hasScanned = false
+    @State private var activeDetail: HomeDetail?
 
     // Cleanup + feedback
     @State private var pendingCleanupAssets: [PHAsset] = []
@@ -89,6 +90,18 @@ struct HomeView: View {
             if !scanning && hasScanned { updateRealData() }
         }
         .navigationBarHidden(true)
+        .fullScreenCover(item: $activeDetail) { detail in
+            NavigationStack {
+                switch detail {
+                case .similar:
+                    PhotoGroupsView(title: "Similar photos", groups: photoService.similarGroups)
+                case .duplicates:
+                    PhotoGroupsView(title: "Duplicates", groups: photoService.duplicateGroups)
+                case .category(let category):
+                    MediaGridView(title: category.title) { assetsFor(category: category) }
+                }
+            }
+        }
         .sheet(isPresented: $showHistory) {
             NavigationStack { HistoryView(store: historyStore) }
         }
@@ -186,18 +199,24 @@ struct HomeView: View {
             }
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
-                NavigationLink(destination: PhotoGroupsView(title: "Similar photos", groups: photoService.similarGroups)) {
+                Button {
+                    activeDetail = .similar
+                } label: {
                     CategoryChip(icon: "photo.on.rectangle.angled", color: .ssEmber, count: photoService.similarGroups.count, title: "Similar", sizeText: formatSize(reclaimableSimilarBytes))
                 }
                 .buttonStyle(.plain)
 
-                NavigationLink(destination: PhotoGroupsView(title: "Duplicates", groups: photoService.duplicateGroups)) {
+                Button {
+                    activeDetail = .duplicates
+                } label: {
                     CategoryChip(icon: "square.on.square", color: .ssCoral, count: photoService.duplicateGroups.count, title: "Duplicates", sizeText: formatSize(reclaimableDuplicateBytes))
                 }
                 .buttonStyle(.plain)
 
                 ForEach(categories) { category in
-                    NavigationLink(destination: destinationFor(category: category)) {
+                    Button {
+                        activeDetail = .category(category)
+                    } label: {
                         let parts = spaceSizeParts(gb: category.sizeGB)
                         CategoryChip(icon: category.icon, color: category.color, count: category.count, title: category.title, sizeText: "\(parts.value) \(parts.unit)")
                     }
@@ -293,6 +312,7 @@ struct HomeView: View {
             async let largeVideosSize = videoService.calculateSize(for: videoService.cameraVideos)
             async let screenRecordingsSize = videoService.calculateSize(for: videoService.screenRecordings)
             async let blurrySize = photoService.calculateSize(for: photoService.blurryPhotos)
+            async let portraitSize = photoService.calculateSize(for: photoService.portraitPhotos)
 
             let recAssets = await MainActor.run { recommendedAssets() }
             async let recSize = photoService.calculateSize(for: recAssets)
@@ -444,10 +464,19 @@ struct HomeView: View {
         }
     }
 
-    @ViewBuilder
-    private func destinationFor(category: MediaCategory) -> some View {
-        MediaGridView(title: category.title) {
-            assetsFor(category: category)
+}
+
+/// Which cleanup detail the home is presenting (as a full-screen page).
+enum HomeDetail: Identifiable {
+    case similar
+    case duplicates
+    case category(MediaCategory)
+
+    var id: String {
+        switch self {
+        case .similar:            return "similar"
+        case .duplicates:         return "duplicates"
+        case .category(let c):    return c.id.uuidString
         }
     }
 }
