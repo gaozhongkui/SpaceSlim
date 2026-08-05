@@ -2,6 +2,15 @@ import SwiftUI
 import Photos
 import AVKit
 
+// MARK: - Sort order
+
+enum MediaSortOrder: Hashable {
+    case largestFirst
+    case smallestFirst
+    case newestFirst
+    case oldestFirst
+}
+
 // MARK: - Media grid detail page
 
 /// A reusable detail page for one cleanup category: a thumbnail grid whose
@@ -19,8 +28,21 @@ struct MediaGridView: View {
     @State private var previewItem: PreviewItem?
     @State private var isLoading = true
     @State private var isDeleting = false
+    @State private var sortOrder: MediaSortOrder = .largestFirst
+    @State private var sizeCache: [String: Int64] = [:]
 
     private let columns = [GridItem(.adaptive(minimum: 104, maximum: 160), spacing: 3)]
+
+    private var sortedAssets: [PHAsset] {
+        assets.sorted { lhs, rhs in
+            switch sortOrder {
+            case .largestFirst:  return (sizeCache[lhs.localIdentifier] ?? 0) > (sizeCache[rhs.localIdentifier] ?? 0)
+            case .smallestFirst: return (sizeCache[lhs.localIdentifier] ?? 0) < (sizeCache[rhs.localIdentifier] ?? 0)
+            case .newestFirst:   return (lhs.creationDate ?? .distantPast) > (rhs.creationDate ?? .distantPast)
+            case .oldestFirst:   return (lhs.creationDate ?? .distantPast) < (rhs.creationDate ?? .distantPast)
+            }
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -40,11 +62,33 @@ struct MediaGridView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if !assets.isEmpty {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Picker("Sort", selection: $sortOrder) {
+                            Label("Largest first", systemImage: "arrow.down").tag(MediaSortOrder.largestFirst)
+                            Label("Smallest first", systemImage: "arrow.up").tag(MediaSortOrder.smallestFirst)
+                            Label("Newest first", systemImage: "clock").tag(MediaSortOrder.newestFirst)
+                            Label("Oldest first", systemImage: "clock.arrow.circlepath").tag(MediaSortOrder.oldestFirst)
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                    }
+                }
+            }
+        }
         .task {
             guard assets.isEmpty else { return }
             let loaded = load()
+            var cache: [String: Int64] = [:]
+            for asset in loaded {
+                let resources = PHAssetResource.assetResources(for: asset)
+                cache[asset.localIdentifier] = resources.first?.value(forKey: "fileSize") as? Int64 ?? 0
+            }
             await MainActor.run {
                 assets = loaded
+                sizeCache = cache
                 isLoading = false
             }
         }
@@ -66,7 +110,7 @@ struct MediaGridView: View {
     private var grid: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 3) {
-                ForEach(assets, id: \.localIdentifier) { asset in
+                ForEach(sortedAssets, id: \.localIdentifier) { asset in
                     MediaGridCell(
                         asset: asset,
                         isSelected: selectedIDs.contains(asset.localIdentifier),

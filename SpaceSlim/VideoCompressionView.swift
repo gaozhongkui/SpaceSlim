@@ -4,6 +4,13 @@ import UIKit
 import Combine
 import AVFoundation
 
+// MARK: - Sort order
+
+enum VideoSortOrder {
+    case largestFirst
+    case smallestFirst
+}
+
 // MARK: - SwiftUI bridge
 
 /// UIKit-backed video compression list. Kept as a `UIViewControllerRepresentable`
@@ -11,12 +18,17 @@ import AVFoundation
 /// ContentView) don't change.
 struct VideoCompressionView: UIViewControllerRepresentable {
     @ObservedObject var videoService: VideoService
+    var sortOrder: VideoSortOrder = .largestFirst
 
     func makeUIViewController(context: Context) -> VideoCompressionViewController {
-        VideoCompressionViewController(videoService: videoService)
+        let controller = VideoCompressionViewController(videoService: videoService)
+        controller.sortOrder = sortOrder
+        return controller
     }
 
-    func updateUIViewController(_ uiViewController: VideoCompressionViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: VideoCompressionViewController, context: Context) {
+        uiViewController.sortOrder = sortOrder
+    }
 }
 
 // MARK: - View controller
@@ -29,8 +41,17 @@ final class VideoCompressionViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let imageManager = PHCachingImageManager()
     private var videos: [PHAsset] = []
+    private var sizeCache: [String: Int64] = [:]
     private var selectedIDs = Set<String>()
     private var cancellables = Set<AnyCancellable>()
+
+    var sortOrder: VideoSortOrder = .largestFirst {
+        didSet {
+            guard oldValue != sortOrder, isViewLoaded else { return }
+            applySort()
+            tableView.reloadData()
+        }
+    }
 
     // Bottom action bar with the single "Compress" button.
     private let bottomBar = UIView()
@@ -193,16 +214,33 @@ final class VideoCompressionViewController: UIViewController {
             var assets: [PHAsset] = []
             result.enumerateObjects { asset, _, _ in assets.append(asset) }
 
+            // Pre-compute file sizes once so sorting/labels don't re-read metadata.
+            var cache: [String: Int64] = [:]
+            for asset in assets {
+                let resources = PHAssetResource.assetResources(for: asset)
+                cache[asset.localIdentifier] = resources.first?.value(forKey: "fileSize") as? Int64 ?? 0
+            }
+
             DispatchQueue.main.async {
                 guard let self else { return }
+                self.sizeCache = cache
                 self.videos = assets
                 // Drop selections that no longer exist.
                 let existing = Set(assets.map(\.localIdentifier))
                 self.selectedIDs.formIntersection(existing)
+                self.applySort()
                 self.emptyLabel.isHidden = !assets.isEmpty
                 self.tableView.reloadData()
                 self.updateCompressButton()
             }
+        }
+    }
+
+    private func applySort() {
+        videos.sort { lhs, rhs in
+            let a = sizeCache[lhs.localIdentifier] ?? 0
+            let b = sizeCache[rhs.localIdentifier] ?? 0
+            return sortOrder == .largestFirst ? a > b : a < b
         }
     }
 
@@ -460,10 +498,11 @@ final class VideoCompressionCell: UITableViewCell {
         representedAssetID = asset.localIdentifier
 
         titleLabel.text = "Video · \(Self.durationString(asset.duration))"
+        let sizeText = Self.sizeString(for: asset)
         if let date = asset.creationDate {
-            subtitleLabel.text = "Created \(Self.dateFormatter.string(from: date))"
+            subtitleLabel.text = "\(sizeText) · \(Self.dateFormatter.string(from: date))"
         } else {
-            subtitleLabel.text = "Created —"
+            subtitleLabel.text = sizeText
         }
         durationBadge.text = " \(Self.durationString(asset.duration)) "
         setChecked(isSelected)
@@ -509,5 +548,14 @@ final class VideoCompressionCell: UITableViewCell {
         let minutes = total / 60
         let seconds = total % 60
         return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    private static func sizeString(for asset: PHAsset) -> String {
+        let resources = PHAssetResource.assetResources(for: asset)
+        let bytes = resources.first?.value(forKey: "fileSize") as? Int64 ?? 0
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .file
+        formatter.allowsNonnumericFormatting = false
+        return formatter.string(fromByteCount: bytes)
     }
 }

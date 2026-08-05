@@ -11,12 +11,14 @@ struct ContentView: View {
     @StateObject private var photoService = PhotoService()
     @StateObject private var videoService = VideoService()
     @StateObject private var storageService = StorageService()
+    @StateObject private var historyStore = CleanupHistoryStore()
     @State private var selectedTab = 0
+    @State private var videoSort: VideoSortOrder = .largestFirst
 
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
-                HomeView(photoService: photoService, videoService: videoService, storageService: storageService, selectedTab: $selectedTab)
+                HomeView(photoService: photoService, videoService: videoService, storageService: storageService, historyStore: historyStore, selectedTab: $selectedTab)
             }
             .tabItem {
                 Label("Clean", systemImage: "trash")
@@ -24,10 +26,22 @@ struct ContentView: View {
             .tag(0)
 
             NavigationStack {
-                VideoCompressionView(videoService: videoService)
+                VideoCompressionView(videoService: videoService, sortOrder: videoSort)
                     .ignoresSafeArea(edges: .bottom)
                     .navigationTitle("Compress")
                     .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Menu {
+                                Picker("Sort", selection: $videoSort) {
+                                    Label("Largest first", systemImage: "arrow.down").tag(VideoSortOrder.largestFirst)
+                                    Label("Smallest first", systemImage: "arrow.up").tag(VideoSortOrder.smallestFirst)
+                                }
+                            } label: {
+                                Image(systemName: "arrow.up.arrow.down")
+                            }
+                        }
+                    }
             }
             .tabItem {
                 Label("Compress", systemImage: "rectangle.compress.vertical")

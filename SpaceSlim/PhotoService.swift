@@ -16,10 +16,13 @@ class PhotoService: ObservableObject {
 
     private let imageManager = PHCachingImageManager()
 
-    /// Laplacian-variance threshold below which a photo counts as blurry.
-    /// Measured on the 299×299 fast-format thumbnail we already fetch for the
-    /// feature print. Higher = stricter (flags more photos). Tune to taste.
-    private static let blurThreshold: Double = 55
+    /// Laplacian-variance threshold below which a photo counts as blurry,
+    /// measured on the 299×299 fast-format thumbnail we already fetch. Driven by
+    /// the Settings "scan depth": Deep raises the bar so more borderline-blurry
+    /// photos get flagged.
+    private var blurThreshold: Double {
+        UserDefaults.standard.string(forKey: "scanDepth") == "deep" ? 110 : 55
+    }
 
     init() {
         checkAuthorization()
@@ -57,6 +60,7 @@ class PhotoService: ObservableObject {
         var fingerprints: [(asset: PHAsset, fingerprint: VNFeaturePrintObservation)] = []
         var blurry: [PHAsset] = []
         let total = allPhotos.count
+        let threshold = blurThreshold
 
         // Phase 1 — analyze each photo once: feature print (for similar/dup)
         // and sharpness (for blur), reusing the same fetched thumbnail. 0 → 0.85.
@@ -66,7 +70,7 @@ class PhotoService: ObservableObject {
             if let fingerprint = result.fingerprint {
                 fingerprints.append((asset, fingerprint))
             }
-            if result.sharpness < Self.blurThreshold {
+            if result.sharpness < threshold {
                 blurry.append(asset)
             }
 
