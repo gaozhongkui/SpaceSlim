@@ -1,3015 +1,3334 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "Clean": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تنظيف"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufräumen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpiar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nettoyer"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "साफ़ करें"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulisci"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "クリーン"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "정리"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpar"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "·  No account, no uploads" : {
+
+    },
+    "%@ total" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld GB used of %lld GB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld GB used of %2$lld GB"
           }
         }
       }
     },
-    "Compress": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ضغط"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komprimieren"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimir"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compresser"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "संपीड़ित करें"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimi"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "圧縮"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "압축"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimir"
+    "%lld item%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld item%2$@"
           }
         }
       }
     },
-    "Settings": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الإعدادات"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einstellungen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajustes"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réglages"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सेटिंग्स"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impostazioni"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "설정"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajustes"
+    "%lld item%@ removed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld item%2$@ removed"
           }
         }
       }
     },
-    "Get Started": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ابدأ الآن"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loslegen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Empezar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commencer"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "शुरू करें"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inizia"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "はじめる"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시작하기"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Começar"
+    "%lld of %lld compressed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld compressed"
           }
         }
       }
     },
-    "Compress videos": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ضغط الفيديوهات"
+    "%lld photos" : {
+
+    },
+    "%lld selected" : {
+
+    },
+    "%lld%%" : {
+
+    },
+    "−%lld%%" : {
+
+    },
+    "100% on-device" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100% على الجهاز"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Videos komprimieren"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 % auf dem Gerät"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimir vídeos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 % en el dispositivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compresser les vidéos"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 % sur l'appareil"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "वीडियो संपीड़ित करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100% डिवाइस पर"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimi video"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100% sul dispositivo"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "動画を圧縮"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100% デバイス内で処理"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "동영상 압축"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100% 기기 내 처리"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimir vídeos"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100% no dispositivo"
           }
         }
       }
     },
-    "Shrink large videos, keep the quality": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "صغّر الفيديوهات الكبيرة مع الحفاظ على الجودة"
+    "About" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حول"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Große Videos verkleinern, Qualität behalten"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reduce vídeos grandes sin perder calidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réduisez les grandes vidéos sans perdre en qualité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "बड़े वीडियो छोटे करें, गुणवत्ता बनाए रखें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "परिचय"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Riduci i video grandi mantenendo la qualità"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informazioni"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "大きな動画を高画質のまま縮小"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアプリについて"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "큰 동영상을 화질 그대로 줄이기"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정보"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reduza vídeos grandes mantendo a qualidade"
-          }
-        }
-      }
-    },
-    "Clean up smartly": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تنظيف ذكي"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clever aufräumen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpia de forma inteligente"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nettoyage intelligent"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्मार्ट सफ़ाई"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulisci in modo intelligente"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "かしこく整理"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스마트하게 정리"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpe de forma inteligente"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobre"
           }
         }
       }
     },
-    "Find similar, duplicate & blurry photos": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ابحث عن الصور المتشابهة والمكررة والمشوّشة"
+    "Activity" : {
+
+    },
+    "All done!" : {
+
+    },
+    "Best" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأفضل"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnliche, doppelte & unscharfe Fotos finden"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beste"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Encuentra fotos similares, duplicadas y borrosas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejor"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trouvez les photos similaires, en double et floues"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meilleure"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "समान, डुप्लिकेट और धुंधली फ़ोटो खोजें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सर्वश्रेष्ठ"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trova foto simili, duplicate e sfocate"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Migliore"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "類似・重複・ぼやけた写真を検出"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ベスト"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "유사·중복·흐린 사진 찾기"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최고"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Encontre fotos semelhantes, duplicadas e desfocadas"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Melhor"
           }
         }
       }
     },
-    "100% on-device": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100% على الجهاز"
+    "Blurry photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صور مشوّشة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100 % auf dem Gerät"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unscharfe Fotos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100 % en el dispositivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotos borrosas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100 % sur l'appareil"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photos floues"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100% डिवाइस पर"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "धुंधली फ़ोटो"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100% sul dispositivo"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto sfocate"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100% デバイス内で処理"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ぼやけた写真"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100% 기기 내 처리"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "흐린 사진"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "100% no dispositivo"
-          }
-        }
-      }
-    },
-    "No account, no uploads — fully private": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بدون حساب، بدون رفع — خصوصية كاملة"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kein Konto, keine Uploads – völlig privat"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sin cuenta, sin subidas: totalmente privado"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sans compte, sans envoi — entièrement privé"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "कोई खाता नहीं, कोई अपलोड नहीं — पूरी तरह निजी"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessun account, nessun caricamento — totalmente privato"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アカウント不要・アップロードなし — 完全プライベート"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "계정·업로드 없음 — 완전 비공개"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sem conta, sem uploads — totalmente privado"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotos desfocadas"
           }
         }
       }
     },
-    "Free up space without\nlosing your memories": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "وفّر مساحة دون فقدان ذكرياتك"
+    "Blurry photos and duplicate/similar copies will be removed from Photos, freeing about %@." : {
+
+    },
+    "Camera Videos (%lld)" : {
+
+    },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speicher freigeben, ohne\nErinnerungen zu verlieren"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Libera espacio sin\nperder tus recuerdos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Libérez de l'espace sans\nperdre vos souvenirs"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "अपनी यादें खोए बिना\nजगह खाली करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रद्द करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Libera spazio senza\nperdere i ricordi"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "思い出を失わずに\n空き容量を確保"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "추억은 그대로,\n저장 공간 확보"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Libere espaço sem\nperder suas memórias"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         }
       }
     },
-    "Next, we'll ask for photo access to scan your library.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بعد ذلك سنطلب الإذن للوصول إلى صورك لفحص مكتبتك."
+    "Classifying..." : {
+
+    },
+    "Clean" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنظيف"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als Nächstes fragen wir nach Fotozugriff, um deine Mediathek zu scannen."
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufräumen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A continuación, pediremos acceso a tus fotos para analizar tu biblioteca."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpiar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ensuite, nous demanderons l'accès aux photos pour analyser votre bibliothèque."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettoyer"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "आगे, हम आपकी लाइब्रेरी स्कैन करने के लिए फ़ोटो एक्सेस मांगेंगे।"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "साफ़ करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ora ti chiederemo l'accesso alle foto per analizzare la libreria."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulisci"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次に、ライブラリをスキャンするために写真へのアクセスを求めます。"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリーン"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음으로 라이브러리를 스캔하기 위해 사진 접근 권한을 요청합니다."
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정리"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Em seguida, pediremos acesso às fotos para analisar sua biblioteca."
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpar"
           }
         }
       }
     },
-    "Enable Photo Access": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تفعيل الوصول إلى الصور"
+    "Clean %lld items?" : {
+
+    },
+    "Clean All Duplicates" : {
+
+    },
+    "Clean Selected" : {
+
+    },
+    "Clean up by category" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التنظيف حسب الفئة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fotozugriff aktivieren"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Kategorie aufräumen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Permitir acceso a Fotos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpiar por categoría"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Autoriser l'accès aux photos"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettoyer par catégorie"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "फ़ोटो एक्सेस चालू करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "श्रेणी के अनुसार साफ़ करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Consenti accesso alle foto"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulisci per categoria"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "写真へのアクセスを許可"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリ別に整理"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "사진 접근 허용"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카테고리별 정리"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Permitir acesso às fotos"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpar por categoria"
           }
         }
       }
     },
-    "Clean up by category": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "التنظيف حسب الفئة"
+    "Clean up smartly" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنظيف ذكي"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach Kategorie aufräumen"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clever aufräumen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpiar por categoría"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpia de forma inteligente"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nettoyer par catégorie"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettoyage intelligent"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "श्रेणी के अनुसार साफ़ करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्मार्ट सफ़ाई"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulisci per categoria"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulisci in modo intelligente"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カテゴリ別に整理"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "かしこく整理"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "카테고리별 정리"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스마트하게 정리"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpar por categoria"
-          }
-        }
-      }
-    },
-    "Similar": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "متشابهة"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnlich"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Similares"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Similaires"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "समान"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Simili"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "類似"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "유사"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semelhantes"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpe de forma inteligente"
           }
         }
       }
     },
-    "Duplicates": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مكرّرة"
+    "Cleaned up!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم التنظيف!"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duplikate"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgeräumt!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duplicados"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Limpio!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Doublons"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettoyé !"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "डुप्लिकेट"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "साफ़ हो गया!"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duplicati"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulito!"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重複"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了！"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "중복"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정리 완료!"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duplicados"
-          }
-        }
-      }
-    },
-    "Large videos": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "فيديوهات كبيرة"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Große Videos"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vídeos grandes"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grandes vidéos"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "बड़े वीडियो"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Video grandi"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "大きな動画"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "큰 동영상"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vídeos grandes"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpo!"
           }
         }
       }
     },
-    "Screenshots": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لقطات الشاشة"
+    "Cleanup" : {
+
+    },
+    "Cleanups and compressions you run will show up here." : {
+
+    },
+    "Clear" : {
+
+    },
+    "Clear temporary files" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مسح الملفات المؤقتة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Screenshots"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temporäre Dateien löschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Capturas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar archivos temporales"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Captures d'écran"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer les fichiers temporaires"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्क्रीनशॉट"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अस्थायी फ़ाइलें साफ़ करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Screenshot"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina file temporanei"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "スクリーンショット"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時ファイルを消去"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스크린샷"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "임시 파일 지우기"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Capturas de tela"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpar arquivos temporários"
           }
         }
       }
     },
-    "Live Photos": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "صور حية"
+    "Cleared" : {
+
+    },
+    "Compress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ضغط"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Live Photos"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komprimieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fotos Live"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimir"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Live Photos"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compresser"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "लाइव फ़ोटो"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "संपीड़ित करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Live Photos"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimi"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Live Photos"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圧縮"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Live Photo"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "압축"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fotos Live"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimir"
           }
         }
       }
     },
-    "Screen recordings": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تسجيلات الشاشة"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bildschirmaufnahmen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grabaciones de pantalla"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrements d'écran"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्क्रीन रिकॉर्डिंग"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrazioni schermo"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "画面収録"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "화면 기록"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gravações de tela"
+    "Compress %lld" : {
+
+    },
+    "Compress %lld video%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Compress %1$lld video%2$@"
           }
         }
       }
     },
-    "Blurry photos": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "صور مشوّشة"
+    "Compress videos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ضغط الفيديوهات"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unscharfe Fotos"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videos komprimieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fotos borrosas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimir vídeos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Photos floues"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compresser les vidéos"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "धुंधली फ़ोटो"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "वीडियो संपीड़ित करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto sfocate"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimi video"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ぼやけた写真"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "動画を圧縮"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "흐린 사진"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동영상 압축"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fotos desfocadas"
-          }
-        }
-      }
-    },
-    "Portraits": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "صور شخصية"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Porträts"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retratos"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Portraits"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "पोर्ट्रेट"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritratti"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ポートレート"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "인물"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retratos"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimir vídeos"
           }
         }
       }
     },
-    "keep everything": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "احتفظ بكل شيء"
+    "Compressing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ الضغط"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "alles behalten"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird komprimiert"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "conservar todo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimiendo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "tout garder"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compression"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सब कुछ रखें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "संपीड़ित हो रहा है"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "mantieni tutto"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compressione"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "すべて残す"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圧縮中"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "모두 유지"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "압축 중"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "manter tudo"
-          }
-        }
-      }
-    },
-    "remove junk": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "احذف غير المهم"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Müll entfernen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "eliminar basura"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "supprimer l'inutile"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "कचरा हटाएँ"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "rimuovi inutili"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "不要を削除"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "불필요 삭제"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "remover lixo"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprimindo"
           }
         }
       }
     },
-    "Delete": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "حذف"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Löschen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "हटाएँ"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elimina"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "削除"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "삭제"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Excluir"
+    "Compressing %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Compressing %1$lld of %2$lld"
           }
         }
       }
     },
-    "Restore": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "استعادة"
+    "Continue" : {
+
+    },
+    "Deep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عميق"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wiederherstellen"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tief"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restaurar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profundo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restaurer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approfondi"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "पुनर्स्थापित करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गहरा"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ripristina"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profondo"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "復元"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳細"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "복원"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정밀"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restaurar"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profundo"
           }
         }
       }
     },
-    "Done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تم"
+    "Delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fertig"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Listo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "हो गया"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हटाएँ"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fine"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完了"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "완료"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삭제"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Concluído"
-          }
-        }
-      }
-    },
-    "Cancel": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "إلغاء"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abbrechen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "रद्द करें"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annulla"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "キャンセル"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "취소"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelar"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir"
           }
         }
       }
     },
-    "Best": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الأفضل"
+    "Deleting…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ الحذف…"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beste"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird gelöscht…"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mejor"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminando…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meilleure"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suppression…"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सर्वश्रेष्ठ"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हटाया जा रहा है…"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Migliore"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminazione…"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ベスト"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除中…"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "최고"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삭제 중…"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Melhor"
-          }
-        }
-      }
-    },
-    "Cleaned up!": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تم التنظيف!"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufgeräumt!"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Limpio!"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nettoyé !"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "साफ़ हो गया!"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pulito!"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完了！"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "정리 완료!"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpo!"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluindo…"
           }
         }
       }
     },
-    "You freed": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لقد وفّرت"
+    "Deselect all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء تحديد الكل"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Freigegeben"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle abwählen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Has liberado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deseleccionar todo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Espace libéré"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout désélectionner"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "आपने खाली किया"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सभी अचयनित करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hai liberato"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deseleziona tutto"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "空き容量"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべて選択解除"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "확보한 용량"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두 선택 해제"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Você liberou"
-          }
-        }
-      }
-    },
-    "Deleting…": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "جارٍ الحذف…"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird gelöscht…"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminando…"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suppression…"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "हटाया जा रहा है…"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminazione…"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "削除中…"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "삭제 중…"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Excluindo…"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desmarcar tudo"
           }
         }
       }
     },
-    "Private Vault": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الخزنة الخاصة"
+    "Done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privater Tresor"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bóveda privada"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coffre privé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "निजी वॉल्ट"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हो गया"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cassaforte privata"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fine"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プライベート保管庫"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "비공개 보관함"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cofre privado"
-          }
-        }
-      }
-    },
-    "Unlock": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "فتح"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entsperren"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquear"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Déverrouiller"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "अनलॉक करें"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sblocca"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ロック解除"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "잠금 해제"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquear"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concluído"
           }
         }
       }
     },
-    "Vault is empty": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الخزنة فارغة"
+    "Duplicate Group (%lld photos)" : {
+
+    },
+    "Duplicates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مكرّرة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tresor ist leer"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplikate"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La bóveda está vacía"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicados"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le coffre est vide"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doublons"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "वॉल्ट खाली है"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डुप्लिकेट"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La cassaforte è vuota"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicati"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保管庫は空です"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "보관함이 비어 있습니다"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중복"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O cofre está vazio"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicados"
           }
         }
       }
     },
-    "Version": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الإصدار"
+    "Each original video will be deleted after its compressed copy is saved. This notice is shown only once." : {
+
+    },
+    "Enable Photo Access" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تفعيل الوصول إلى الصور"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotozugriff aktivieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versión"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir acceso a Fotos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser l'accès aux photos"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "संस्करण"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़ोटो एक्सेस चालू करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versione"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consenti accesso alle foto"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "バージョン"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "写真へのアクセスを許可"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "버전"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사진 접근 허용"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versão"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir acesso às fotos"
           }
         }
       }
     },
-    "About": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "حول"
+    "Estimate — actual size depends on each video." : {
+
+    },
+    "ESTIMATED RESULT" : {
+
+    },
+    "Find similar, duplicate & blurry photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابحث عن الصور المتشابهة والمكررة والمشوّشة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Über"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ähnliche, doppelte & unscharfe Fotos finden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acerca de"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra fotos similares, duplicadas y borrosas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À propos"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trouvez les photos similaires, en double et floues"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "परिचय"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "समान, डुप्लिकेट और धुंधली फ़ोटो खोजें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Informazioni"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trova foto simili, duplicate e sfocate"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "このアプリについて"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "類似・重複・ぼやけた写真を検出"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "정보"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "유사·중복·흐린 사진 찾기"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sobre"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encontre fotos semelhantes, duplicadas e desfocadas"
           }
         }
       }
     },
-    "Privacy Policy": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "سياسة الخصوصية"
+    "Frame rate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "معدل الإطارات"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datenschutzrichtlinie"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildrate"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Política de privacidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotogramas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Politique de confidentialité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fréquence d'images"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "गोपनीयता नीति"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़्रेम दर"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Informativa sulla privacy"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frame rate"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プライバシーポリシー"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フレームレート"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "개인정보 처리방침"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프레임 속도"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Política de Privacidade"
-          }
-        }
-      }
-    },
-    "Privacy": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الخصوصية"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datenschutz"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacidad"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Confidentialité"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "गोपनीयता"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacy"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プライバシー"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "개인정보"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacidade"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taxa de quadros"
           }
         }
       }
     },
-    "Scan depth": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "عمق الفحص"
+    "Free up space without\nlosing your memories" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّر مساحة دون فقدان ذكرياتك"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scan-Tiefe"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speicher freigeben, ohne\nErinnerungen zu verlieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profundidad de análisis"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libera espacio sin\nperder tus recuerdos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profondeur d'analyse"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libérez de l'espace sans\nperdre vos souvenirs"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्कैन गहराई"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अपनी यादें खोए बिना\nजगह खाली करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profondità scansione"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libera spazio senza\nperdere i ricordi"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "スキャンの深さ"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "思い出を失わずに\n空き容量を確保"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스캔 깊이"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추억은 그대로,\n저장 공간 확보"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profundidade da análise"
-          }
-        }
-      }
-    },
-    "Standard": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "قياسي"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standard"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estándar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standard"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "मानक"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standard"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "標準"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "표준"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Padrão"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libere espaço sem\nperder suas memórias"
           }
         }
       }
     },
-    "Deep": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "عميق"
+    "Get Started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ الآن"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tief"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loslegen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profundo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approfondi"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "गहरा"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शुरू करें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profondo"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "詳細"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "はじめる"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "정밀"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작하기"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profundo"
-          }
-        }
-      }
-    },
-    "Scan on open": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الفحص عند الفتح"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beim Öffnen scannen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analizar al abrir"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analyser à l'ouverture"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "खोलने पर स्कैन करें"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scansione all'apertura"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "起動時にスキャン"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "열 때 스캔"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analisar ao abrir"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Começar"
           }
         }
       }
     },
-    "Storage": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "التخزين"
+    "Group %lld" : {
+
+    },
+    "History" : {
+
+    },
+    "In Recently Deleted for 30 days — recoverable" : {
+
+    },
+    "Keep 1" : {
+
+    },
+    "Keep best (recommended)" : {
+
+    },
+    "keep everything" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احتفظ بكل شيء"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speicher"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "alles behalten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Almacenamiento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "conservar todo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stockage"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tout garder"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्टोरेज"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सब कुछ रखें"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spazio"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mantieni tutto"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ストレージ"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべて残す"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "저장 공간"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두 유지"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Armazenamento"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "manter tudo"
           }
         }
       }
     },
-    "Clear temporary files": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مسح الملفات المؤقتة"
+    "Keep SpaceSlim open until it finishes." : {
+
+    },
+    "Large videos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فيديوهات كبيرة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temporäre Dateien löschen"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Große Videos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Borrar archivos temporales"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vídeos grandes"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Effacer les fichiers temporaires"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grandes vidéos"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "अस्थायी फ़ाइलें साफ़ करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बड़े वीडियो"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elimina file temporanei"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video grandi"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一時ファイルを消去"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大きな動画"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "임시 파일 지우기"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "큰 동영상"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limpar arquivos temporários"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vídeos grandes"
           }
         }
       }
     },
-    "Deselect all": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "إلغاء تحديد الكل"
+    "Largest" : {
+
+    },
+    "Largest first" : {
+
+    },
+    "Limited photo access" : {
+
+    },
+    "Live Photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صور حية"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle abwählen"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Photos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deseleccionar todo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotos Live"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tout désélectionner"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Photos"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सभी अचयनित करें"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लाइव फ़ोटो"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deseleziona tutto"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Photos"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "すべて選択解除"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Photos"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "모두 선택 해제"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Photo"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desmarcar tudo"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotos Live"
           }
         }
       }
     },
-    "Nothing here": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لا شيء هنا"
+    "Locked" : {
+
+    },
+    "Newest first" : {
+
+    },
+    "Next, we'll ask for photo access to scan your library." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعد ذلك سنطلب الإذن للوصول إلى صورك لفحص مكتبتك."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nichts hier"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Nächstes fragen wir nach Fotozugriff, um deine Mediathek zu scannen."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nada aquí"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A continuación, pediremos acceso a tus fotos para analizar tu biblioteca."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rien ici"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ensuite, nous demanderons l'accès aux photos pour analyser votre bibliothèque."
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "यहाँ कुछ नहीं"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आगे, हम आपकी लाइब्रेरी स्कैन करने के लिए फ़ोटो एक्सेस मांगेंगे।"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niente qui"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ora ti chiederemo l'accesso alle foto per analizzare la libreria."
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "何もありません"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次に、ライブラリをスキャンするために写真へのアクセスを求めます。"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "항목 없음"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음으로 라이브러리를 스캔하기 위해 사진 접근 권한을 요청합니다."
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nada aqui"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em seguida, pediremos acesso às fotos para analisar sua biblioteca."
           }
         }
       }
     },
-    "Compressing": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "جارٍ الضغط"
+    "No account, no uploads — fully private" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بدون حساب، بدون رفع — خصوصية كاملة"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird komprimiert"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Konto, keine Uploads – völlig privat"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimiendo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin cuenta, sin subidas: totalmente privado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compression"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans compte, sans envoi — entièrement privé"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "संपीड़ित हो रहा है"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई खाता नहीं, कोई अपलोड नहीं — पूरी तरह निजी"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compressione"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun account, nessun caricamento — totalmente privato"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "圧縮中"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アカウント不要・アップロードなし — 完全プライベート"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "압축 중"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계정·업로드 없음 — 완전 비공개"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprimindo"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem conta, sem uploads — totalmente privado"
           }
         }
       }
     },
-    "Quality": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "الجودة"
+    "No camera videos" : {
+
+    },
+    "No Duplicates" : {
+
+    },
+    "No exact duplicate photos found" : {
+
+    },
+    "No history yet" : {
+
+    },
+    "No screen recordings" : {
+
+    },
+    "No Similar Photos" : {
+
+    },
+    "No videos found" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد فيديوهات"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qualität"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Videos gefunden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontraron vídeos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qualité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune vidéo trouvée"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "गुणवत्ता"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई वीडियो नहीं मिला"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qualità"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun video trovato"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "画質"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "動画が見つかりません"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "품질"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동영상 없음"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qualidade"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum vídeo encontrado"
           }
         }
       }
     },
-    "Frame rate": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "معدل الإطارات"
+    "Nothing here" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا شيء هنا"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bildrate"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts hier"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fotogramas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada aquí"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fréquence d'images"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien ici"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "फ़्रेम दर"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यहाँ कुछ नहीं"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Frame rate"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niente qui"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "フレームレート"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "何もありません"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "프레임 속도"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "항목 없음"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taxa de quadros"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada aqui"
           }
         }
       }
     },
-    "No videos found": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لا توجد فيديوهات"
+    "OK" : {
+
+    },
+    "Oldest first" : {
+
+    },
+    "Originals are deleted once the compressed copy is saved." : {
+
+    },
+    "Originals are kept; a compressed copy is added." : {
+
+    },
+    "Originals removed" : {
+
+    },
+    "Portraits" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صور شخصية"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Videos gefunden"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porträts"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se encontraron vídeos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retratos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune vidéo trouvée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portraits"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "कोई वीडियो नहीं मिला"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पोर्ट्रेट"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessun video trovato"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritratti"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "動画が見つかりません"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ポートレート"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "동영상 없음"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인물"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nenhum vídeo encontrado"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retratos"
           }
         }
       }
+    },
+    "Privacy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الخصوصية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confidentialité"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गोपनीयता"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライバシー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개인정보"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacidade"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سياسة الخصوصية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutzrichtlinie"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Política de privacidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Politique de confidentialité"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गोपनीयता नीति"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informativa sulla privacy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライバシーポリシー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개인정보 처리방침"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Política de Privacidade"
+          }
+        }
+      }
+    },
+    "Private Vault" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الخزنة الخاصة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privater Tresor"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bóveda privada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coffre privé"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "निजी वॉल्ट"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cassaforte privata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライベート保管庫"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비공개 보관함"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cofre privado"
+          }
+        }
+      }
+    },
+    "Quality" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الجودة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualität"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualité"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गुणवत्ता"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualità"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画質"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "품질"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualidade"
+          }
+        }
+      }
+    },
+    "RECLAIMABLE" : {
+
+    },
+    "reclaimed" : {
+
+    },
+    "remove junk" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احذف غير المهم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müll entfernen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eliminar basura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "supprimer l'inutile"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कचरा हटाएँ"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rimuovi inutili"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不要を削除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "불필요 삭제"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "remover lixo"
+          }
+        }
+      }
+    },
+    "Removing %lld item%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removing %1$lld item%2$@"
+          }
+        }
+      }
+    },
+    "Replace originals after compressing" : {
+
+    },
+    "Replace originals?" : {
+
+    },
+    "Restore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استعادة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पुनर्स्थापित करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복원"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar"
+          }
+        }
+      }
+    },
+    "Results will appear here after scanning" : {
+
+    },
+    "save ~%@" : {
+
+    },
+    "Save about" : {
+
+    },
+    "Scan depth" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عمق الفحص"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan-Tiefe"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profundidad de análisis"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profondeur d'analyse"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्कैन गहराई"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profondità scansione"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スキャンの深さ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스캔 깊이"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profundidade da análise"
+          }
+        }
+      }
+    },
+    "Scan on open" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الفحص عند الفتح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Öffnen scannen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizar al abrir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyser à l'ouverture"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "खोलने पर स्कैन करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansione all'apertura"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "起動時にスキャン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "열 때 스캔"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisar ao abrir"
+          }
+        }
+      }
+    },
+    "Scanning %lld%%" : {
+
+    },
+    "Scanning duplicates... %lld%%" : {
+
+    },
+    "Scanning photos... %lld%%" : {
+
+    },
+    "Scanning…" : {
+
+    },
+    "Screen recordings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيلات الشاشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirmaufnahmen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grabaciones de pantalla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrements d'écran"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन रिकॉर्डिंग"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrazioni schermo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面収録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 기록"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravações de tela"
+          }
+        }
+      }
+    },
+    "Screen Recordings (%lld)" : {
+
+    },
+    "Screenshots" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لقطات الشاشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screenshots"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capturas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Captures d'écran"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीनशॉट"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screenshot"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スクリーンショット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스크린샷"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capturas de tela"
+          }
+        }
+      }
+    },
+    "Select all" : {
+
+    },
+    "Select more" : {
+
+    },
+    "Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإعدادات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सेटिंग्स"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impostazioni"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
+          }
+        }
+      }
+    },
+    "Shrink large videos, keep the quality" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صغّر الفيديوهات الكبيرة مع الحفاظ على الجودة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Große Videos verkleinern, Qualität behalten"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduce vídeos grandes sin perder calidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réduisez les grandes vidéos sans perdre en qualité"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बड़े वीडियो छोटे करें, गुणवत्ता बनाए रखें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riduci i video grandi mantenendo la qualità"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大きな動画を高画質のまま縮小"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "큰 동영상을 화질 그대로 줄이기"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduza vídeos grandes mantendo a qualidade"
+          }
+        }
+      }
+    },
+    "Similar" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متشابهة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ähnlich"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Similares"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Similaires"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "समान"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simili"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "類似"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "유사"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semelhantes"
+          }
+        }
+      }
+    },
+    "Similar Group (%lld photos)" : {
+
+    },
+    "Similar Photos" : {
+
+    },
+    "Smallest" : {
+
+    },
+    "Smallest first" : {
+
+    },
+    "Sort" : {
+
+    },
+    "SpaceSlim" : {
+
+    },
+    "SpaceSlim can only scan the photos you selected" : {
+
+    },
+    "SpaceSlim needs photo access to scan your library." : {
+
+    },
+    "Standard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قياسي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estándar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मानक"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標準"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "표준"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padrão"
+          }
+        }
+      }
+    },
+    "Storage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التخزين"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speicher"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Almacenamiento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stockage"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्टोरेज"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spazio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストレージ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장 공간"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Armazenamento"
+          }
+        }
+      }
+    },
+    "Tap + to move photos & videos here.\nThey're removed from Photos and hidden." : {
+
+    },
+    "Tap a card to review and clean" : {
+
+    },
+    "Total reclaimed" : {
+
+    },
+    "Unlock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entsperren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquear"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déverrouiller"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अनलॉक करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sblocca"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ロック解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잠금 해제"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquear"
+          }
+        }
+      }
+    },
+    "Vault is empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الخزنة فارغة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tresor ist leer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La bóveda está vacía"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le coffre est vide"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "वॉल्ट खाली है"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La cassaforte è vuota"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保管庫は空です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보관함이 비어 있습니다"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O cofre está vazio"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإصدار"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "संस्करण"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versione"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バージョン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버전"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão"
+          }
+        }
+      }
+    },
+    "Version %@" : {
+
+    },
+    "video" : {
+
+    },
+    "Video · %@" : {
+
+    },
+    "Video Classification" : {
+
+    },
+    "Video compression" : {
+
+    },
+    "videos" : {
+
+    },
+    "Videos in your library will show up here,\nready to shrink without losing them." : {
+
+    },
+    "Working…" : {
+
+    },
+    "You freed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لقد وفّرت"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Freigegeben"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has liberado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espace libéré"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपने खाली किया"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hai liberato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空き容量"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확보한 용량"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você liberou"
+          }
+        }
+      }
+    },
+    "You saved" : {
+
+    },
+    "Your hidden photos & videos are encrypted\nand unlocked with Face ID." : {
+
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
