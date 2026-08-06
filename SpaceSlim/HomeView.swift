@@ -19,6 +19,7 @@ struct HomeView: View {
         MediaCategory(title: "Live Photos", subtitle: "Not scanned", count: 0, sizeGB: 0, proportion: 0, icon: "livephoto", color: .ssPink, isSelected: true),
         MediaCategory(title: "Screen recordings", subtitle: "Not scanned", count: 0, sizeGB: 0, proportion: 0, icon: "record.circle", color: .ssCoral, isSelected: false),
         MediaCategory(title: "Blurry photos", subtitle: "Not scanned", count: 0, sizeGB: 0, proportion: 0, icon: "camera.filters", color: .ssIndigo, isSelected: true),
+        MediaCategory(title: "Portraits", subtitle: "Not scanned", count: 0, sizeGB: 0, proportion: 0, icon: "person.crop.square.fill", color: .ssSky, isSelected: true),
     ]
 
     @State private var reclaimableSimilarBytes: Int64 = 0
@@ -185,18 +186,15 @@ struct HomeView: View {
 
     private var categoriesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("Clean up by category")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .foregroundStyle(Color.ssTextPrimary)
-                Spacer()
-                HStack(spacing: 3) {
-                    Text("Tap to review")
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    Image(systemName: "chevron.right").font(.system(size: 9, weight: .bold))
-                }
-                .foregroundStyle(Color.ssTeal)
+                Text("Tap a card to review and clean")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(Color.ssTextTertiary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
                 Button {
@@ -325,10 +323,12 @@ struct HomeView: View {
             let lvSize = await largeVideosSize
             let srSize = await screenRecordingsSize
             let blSize = await blurrySize
+            let ptSize = await portraitSize
             let recBytes = await recSize
             let simSize = await similarSize
             let dupSize = await duplicateSize
             let blurryCount = photoService.blurryPhotos.count
+            let portraitCount = photoService.portraitPhotos.count
 
             await MainActor.run {
                 self.reclaimableSimilarBytes = simSize
@@ -342,7 +342,8 @@ struct HomeView: View {
                     (title: "Screenshots", count: screenshots.count, size: sSize, icon: "camera.viewfinder", color: Color.ssTeal),
                     (title: "Live Photos", count: livePhotos.count, size: lSize, icon: "livephoto", color: Color.ssPink),
                     (title: "Screen recordings", count: videoService.screenRecordings.count, size: srSize, icon: "record.circle", color: Color.ssCoral),
-                    (title: "Blurry photos", count: blurryCount, size: blSize, icon: "camera.filters", color: Color.ssIndigo)
+                    (title: "Blurry photos", count: blurryCount, size: blSize, icon: "camera.filters", color: Color.ssIndigo),
+                    (title: "Portraits", count: portraitCount, size: ptSize, icon: "person.crop.square.fill", color: Color.ssSky)
                 ]
 
                 let maxSize = max(categoriesRaw.map { $0.size }.max() ?? 1, 1)
@@ -438,6 +439,7 @@ struct HomeView: View {
         case "Live Photos":       return fetchAssets(subtype: .photoLive)
         case "Screen recordings": return videoService.screenRecordings
         case "Blurry photos":     return photoService.blurryPhotos
+        case "Portraits":         return photoService.portraitPhotos
         default:                  return []
         }
     }
@@ -816,6 +818,7 @@ extension Color {
     static let ssCoral  = Color(red: 1.000, green: 0.420, blue: 0.361)
     static let ssPink   = Color(red: 1.000, green: 0.498, blue: 0.690)
     static let ssIndigo = Color(red: 0.608, green: 0.549, blue: 0.969)
+    static let ssSky    = Color(red: 0.290, green: 0.620, blue: 0.980)
 
     static let ssBackground = Color(light: UIColor(red: 0.965, green: 0.961, blue: 0.984, alpha: 1),
                                      dark:  UIColor(red: 0.043, green: 0.059, blue: 0.106, alpha: 1))

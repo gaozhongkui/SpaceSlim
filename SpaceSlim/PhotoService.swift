@@ -3,6 +3,7 @@ import Vision
 import SwiftUI
 import Combine
 import CoreGraphics
+import UIKit
 
 class PhotoService: ObservableObject {
     @Published var similarGroups: [PhotoGroup] = []
@@ -88,6 +89,27 @@ class PhotoService: ObservableObject {
                 self.scanStage = "Analyzing photos \(done)/\(total)"
             }
         }
+
+        #if targetEnvironment(simulator)
+        // The iOS Simulator has no ML engine, so the Vision feature-print and
+        // face requests always fail — the similar/duplicate/portrait categories
+        // would be permanently empty. To let the UI be previewed here, fall back
+        // to a filename/size/dimension heuristic. This branch never compiles
+        // into a device build.
+        if fingerprints.isEmpty && total > 0 {
+            let mock = simulatorMockClassification(allPhotos)
+            await MainActor.run {
+                self.similarGroups = mock.similar
+                self.duplicateGroups = mock.duplicates
+                self.blurryPhotos = blurry
+                self.portraitPhotos = mock.portraits
+                self.progress = 1
+                self.scanStage = "Done"
+                self.isScanning = false
+            }
+            return
+        }
+        #endif
 
         // Phase 2 — group by visual distance. 0.85 → 1.0.
         //
@@ -181,30 +203,52 @@ class PhotoService: ObservableObject {
         return await withCheckedContinuation { continuation in
             let options = PHImageRequestOptions()
             options.isSynchronous = false
-            options.deliveryMode = .fastFormat
+            // `.highQualityFormat` delivers exactly once with a real image; the
+            // old `.fastFormat` returned nil whenever no fast thumbnail was
+            // cached, which silently made the whole scan find nothing.
+            options.deliveryMode = .highQualityFormat
+            options.isNetworkAccessAllowed = true
+            options.resizeMode = .fast
 
-            imageManager.requestImage(for: asset, targetSize: CGSize(width: 299, height: 299), contentMode: .aspectFill, options: options) { image, _ in
-                guard let image = image, let cgImage = image.cgImage else {
+            var resumed = false
+            PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 400, height: 400), contentMode: .aspectFill, options: options) { image, _ in
+                if resumed { return }
+                // The delivered UIImage can be CIImage-backed (nil `.cgImage`);
+                // render one so Vision + the blur metric always have a CGImage.
+                guard let image, let cgImage = Self.cgImage(from: image) else {
+                    resumed = true
                     // Couldn't load — treat as sharp so we don't false-flag it.
                     continuation.resume(returning: (nil, .greatestFiniteMagnitude, false))
                     return
                 }
+                resumed = true
 
                 let sharpness = self.laplacianVariance(of: cgImage)
 
-                let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+                let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
                 let featurePrint = VNGenerateImageFeaturePrintRequest()
                 let faceRequest = VNDetectFaceRectanglesRequest()
+                // Run independently so one failing doesn't drop the other.
+                // (Both are no-ops in the iOS Simulator, which has no ML engine.)
+                try? handler.perform([featurePrint])
+                try? handler.perform([faceRequest])
 
-                do {
-                    try requestHandler.perform([featurePrint, faceRequest])
-                    let hasFace = !((faceRequest.results as? [VNFaceObservation])?.isEmpty ?? true)
-                    continuation.resume(returning: (featurePrint.results?.first as? VNFeaturePrintObservation, sharpness, hasFace))
-                } catch {
-                    continuation.resume(returning: (nil, sharpness, false))
-                }
+                let hasFace = !((faceRequest.results as? [VNFaceObservation])?.isEmpty ?? true)
+                continuation.resume(returning: (featurePrint.results?.first as? VNFeaturePrintObservation, sharpness, hasFace))
             }
         }
+    }
+
+    /// Returns a CGImage for a UIImage, rendering one when the image is
+    /// CIImage-backed (its `.cgImage` is nil).
+    private static func cgImage(from image: UIImage) -> CGImage? {
+        if let cg = image.cgImage { return cg }
+        guard image.size.width > 0, image.size.height > 0 else { return nil }
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
+        let rendered = renderer.image { _ in image.draw(in: CGRect(origin: .zero, size: image.size)) }
+        return rendered.cgImage
     }
 
     /// Variance of the Laplacian — a standard, real blur metric. The image is
@@ -253,6 +297,46 @@ class PhotoService: ObservableObject {
         let mean = sum / count
         return (sumSq / count) - (mean * mean)
     }
+
+    #if targetEnvironment(simulator)
+    /// Simulator-only preview data. Groups by real photo metadata so the
+    /// UI can be exercised without the (unavailable) Vision ML engine.
+    private func simulatorMockClassification(_ result: PHFetchResult<PHAsset>) -> (similar: [PhotoGroup], duplicates: [PhotoGroup], portraits: [PHAsset]) {
+        var all: [PHAsset] = []
+        result.enumerateObjects { asset, _, _ in all.append(asset) }
+
+        func fileName(_ a: PHAsset) -> String { PHAssetResource.assetResources(for: a).first?.originalFilename ?? "" }
+        func fileSize(_ a: PHAsset) -> Int64 { (PHAssetResource.assetResources(for: a).first?.value(forKey: "fileSize") as? Int64) ?? 0 }
+
+        // Portraits: seeded "face*" images if present, else every 3rd photo so
+        // the category is never empty in a fresh simulator.
+        var portraits = all.filter { fileName($0).lowercased().contains("face") }
+        if portraits.isEmpty {
+            portraits = all.enumerated().filter { $0.offset % 3 == 0 }.map(\.element)
+        }
+        let portraitIDs = Set(portraits.map(\.localIdentifier))
+
+        // Group the remaining photos by pixel dimensions.
+        let rest = all.filter { !portraitIDs.contains($0.localIdentifier) }
+        var byDims: [String: [PHAsset]] = [:]
+        for a in rest { byDims["\(a.pixelWidth)x\(a.pixelHeight)", default: []].append(a) }
+
+        var duplicates: [PhotoGroup] = []
+        var similar: [PhotoGroup] = []
+        for (_, group) in byDims where group.count > 1 {
+            // Identical bytes → duplicates; same dimensions only → similar.
+            var bySize: [Int64: [PHAsset]] = [:]
+            for a in group { bySize[fileSize(a), default: []].append(a) }
+            var leftovers: [PHAsset] = []
+            for (_, sameBytes) in bySize {
+                if sameBytes.count > 1 { duplicates.append(PhotoGroup(assets: sameBytes)) }
+                else { leftovers.append(contentsOf: sameBytes) }
+            }
+            if leftovers.count > 1 { similar.append(PhotoGroup(assets: Array(leftovers.prefix(6)))) }
+        }
+        return (similar, duplicates, portraits)
+    }
+    #endif
 
     func calculateSize(for assets: [PHAsset]) async -> Int64 {
         var totalSize: Int64 = 0
