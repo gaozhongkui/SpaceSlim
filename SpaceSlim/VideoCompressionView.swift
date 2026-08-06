@@ -66,7 +66,13 @@ struct VideoCompressionView: View {
                 compressBar
             }
         }
-        .onAppear { if !hasLoaded { fetch() } }
+        .onAppear {
+            if !hasLoaded { fetch() }
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
+        .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
         .onChange(of: sortOrder) { _ in applySort() }
         .fullScreenCover(isPresented: $showOptions) {
             NavigationStack {
