@@ -122,3 +122,9 @@ similar photos, blurry, private vault, hide photos, clean up.
 
 _This document is for product and marketing reference. Replace placeholder
 contact details in the legal documents before publishing._
+
+
+
+隐私政策：https://sites.google.com/view/spaceslim
+
+服务条款：https://sites.google.com/view/spaceslim/Terms-of-Service

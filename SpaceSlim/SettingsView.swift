@@ -4,7 +4,6 @@ struct SettingsView: View {
     @AppStorage("scanDepth") private var scanDepth = "standard"
     @AppStorage("autoScan") private var autoScan = true
 
-    @State private var showPrivacy = false
     @State private var cacheCleared = false
     @State private var showVault = false
 
@@ -36,9 +35,6 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
-            .sheet(isPresented: $showPrivacy) {
-                PrivacyPolicyView()
-            }
             .fullScreenCover(isPresented: $showVault) {
                 NavigationStack { VaultView() }
             }
@@ -129,16 +125,21 @@ struct SettingsView: View {
                     .foregroundStyle(Color.ssTextSecondary)
             }
             RowDivider()
-            Button {
-                showPrivacy = true
-            } label: {
+            Link(destination: URL(string: "https://sites.google.com/view/spaceslim")!) {
                 SettingsRow(icon: "lock.shield", color: .ssSky, title: "Privacy Policy") {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 13, weight: .bold))
                         .foregroundStyle(Color.ssTextTertiary)
                 }
             }
-            .buttonStyle(.plain)
+            RowDivider()
+            Link(destination: URL(string: "https://sites.google.com/view/spaceslim/Terms-of-Service")!) {
+                SettingsRow(icon: "doc.text", color: .ssViolet, title: "Terms of Service") {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(Color.ssTextTertiary)
+                }
+            }
         }
     }
 
@@ -255,55 +256,4 @@ private struct SegmentedControl: View {
     }
 }
 
-// MARK: - Privacy policy
 
-struct PrivacyPolicyView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                HomeBackground()
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 18) {
-                        section("Your privacy",
-                                "SpaceSlim works entirely on your device. It reads your photo library only to find items you can clean up — similar and duplicate photos, blurry shots, large videos, screenshots, and screen recordings.")
-                        section("What we access",
-                                "• Your photo library, to scan and classify media.\n• On-device storage information, to show how full your device is.")
-                        section("What we don't do",
-                                "• Nothing is uploaded to any server.\n• No analytics or tracking.\n• Deletions and compressions happen locally, and always go through the system's own confirmation.")
-                        section("You stay in control",
-                                "You choose what to delete or compress. You can revoke photo access any time in the Settings app.")
-                    }
-                    .padding(20)
-                    .padding(.bottom, 40)
-                }
-            }
-            .navigationTitle("Privacy Policy")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .tint(.ssViolet)
-                }
-            }
-        }
-    }
-
-    private func section(_ title: String, _ body: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.system(size: 17, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.ssTextPrimary)
-            Text(body)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(Color.ssTextSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .glassCard(radius: 18)
-    }
-}
