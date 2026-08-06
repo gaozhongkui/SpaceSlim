@@ -131,18 +131,22 @@ final class VaultStore: ObservableObject {
     func export(_ targets: Set<UUID>) async -> Int {
         isBusy = true
         defer { isBusy = false }
-        var exported = 0
+        var successfullyExportedIDs = Set<UUID>()
         let toExport = items.filter { targets.contains($0.id) }
         for item in toExport {
             guard let data = data(for: item) else { continue }
             let ext = item.isVideo ? "mov" : "jpg"
             let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("\(item.id.uuidString).\(ext)")
             try? data.write(to: tmp, options: .atomic)
-            if await Self.saveToPhotos(url: tmp, isVideo: item.isVideo) { exported += 1 }
+            if await Self.saveToPhotos(url: tmp, isVideo: item.isVideo) {
+                successfullyExportedIDs.insert(item.id)
+            }
             try? FileManager.default.removeItem(at: tmp)
         }
-        remove(targets)
-        return exported
+        if !successfullyExportedIDs.isEmpty {
+            remove(successfullyExportedIDs)
+        }
+        return successfullyExportedIDs.count
     }
 
     // MARK: - Keychain key

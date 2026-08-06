@@ -328,7 +328,13 @@ private struct VaultPreview: View {
             }
         }
         .onAppear(perform: load)
-        .onDisappear { player?.pause() }
+        .onDisappear {
+            player?.pause()
+            if item.isVideo {
+                let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("\(item.id.uuidString).mov")
+                try? FileManager.default.removeItem(at: tmp)
+            }
+        }
     }
 
     private func load() {
