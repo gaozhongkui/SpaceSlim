@@ -41,6 +41,7 @@ struct VideoCompressionView: View {
 
             if hasLoaded && videos.isEmpty {
                 emptyState
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 12) {
@@ -168,7 +169,6 @@ struct VideoCompressionView: View {
                 .foregroundStyle(Color.ssTextTertiary)
                 .multilineTextAlignment(.center)
         }
-        .padding(.bottom, 60)
     }
 
     private var compressBar: some View {

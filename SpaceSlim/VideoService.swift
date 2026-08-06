@@ -39,6 +39,14 @@ class VideoService: ObservableObject {
         }
     }
 
+    /// Removes deleted videos from the in-memory classification so the
+    /// dashboard stays accurate after a delete.
+    func remove(assetIDs ids: Set<String>) {
+        guard !ids.isEmpty else { return }
+        cameraVideos.removeAll { ids.contains($0.localIdentifier) }
+        screenRecordings.removeAll { ids.contains($0.localIdentifier) }
+    }
+
     func calculateSize(for assets: [PHAsset]) async -> Int64 {
         var totalSize: Int64 = 0
         for asset in assets {

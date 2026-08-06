@@ -6,6 +6,7 @@ struct SettingsView: View {
 
     @State private var showPrivacy = false
     @State private var cacheCleared = false
+    @State private var showVault = false
 
     private var appVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -15,72 +16,129 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    Picker(selection: $scanDepth) {
-                        Text("Standard").tag("standard")
-                        Text("Deep").tag("deep")
-                    } label: {
-                        Label("Scan Depth", systemImage: "magnifyingglass")
-                    }
+            ZStack {
+                HomeBackground()
 
-                    Toggle(isOn: $autoScan) {
-                        Label("Scan on open", systemImage: "sparkles")
-                    }
-                } header: {
-                    Text("Clean Strategy")
-                } footer: {
-                    Text(scanDepth == "deep"
-                         ? "Deep flags more borderline-blurry photos — slower but more thorough."
-                         : "Standard flags only clearly blurry photos.")
-                }
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 18) {
+                        brandHeader
 
-                Section {
-                    Button {
-                        clearTemporaryFiles()
-                    } label: {
-                        HStack {
-                            Label("Clear temporary files", systemImage: "trash")
-                            Spacer()
-                            if cacheCleared {
-                                Image(systemName: "checkmark")
-                                    .foregroundStyle(.green)
-                            }
-                        }
+                        privacyCard
+                        cleanStrategyCard
+                        storageCard
+                        aboutCard
                     }
-                    .tint(.primary)
-                } header: {
-                    Text("Storage")
-                } footer: {
-                    Text("Removes leftover temporary files (e.g. from interrupted compressions).")
-                }
-
-                Section("About") {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text(appVersion)
-                            .foregroundStyle(.secondary)
-                    }
-                    Button {
-                        showPrivacy = true
-                    } label: {
-                        HStack {
-                            Text("Privacy Policy")
-                                .tint(.primary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
-                    .tint(.primary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .padding(.bottom, 110)
                 }
             }
             .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .sheet(isPresented: $showPrivacy) {
                 PrivacyPolicyView()
             }
+            .fullScreenCover(isPresented: $showVault) {
+                NavigationStack { VaultView() }
+            }
+        }
+    }
+
+    // MARK: - Header
+
+    private var brandHeader: some View {
+        VStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 76, height: 76)
+                    .shadow(color: .ssViolet.opacity(0.4), radius: 12, y: 6)
+                Image(systemName: "sparkles")
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+            VStack(spacing: 3) {
+                Text("SpaceSlim")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.ssTextPrimary)
+                Text("Version \(appVersion)")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(Color.ssTextTertiary)
+            }
+        }
+        .padding(.top, 8)
+    }
+
+    // MARK: - Cards
+
+    private var privacyCard: some View {
+        SettingsCard(title: "Privacy", footer: "Move photos & videos here to hide them from the Photos app — encrypted and locked behind Face ID.") {
+            Button { showVault = true } label: {
+                SettingsRow(icon: "lock.rectangle.stack.fill", color: .ssViolet, title: "Private Vault") {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(Color.ssTextTertiary)
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var cleanStrategyCard: some View {
+        SettingsCard(title: "Clean strategy", footer: scanDepth == "deep"
+                     ? "Deep flags more borderline-blurry photos — slower but more thorough."
+                     : "Standard flags only clearly blurry photos.") {
+            SettingsRow(icon: "magnifyingglass", color: .ssViolet, title: "Scan depth") {
+                SegmentedControl(options: [("standard", "Standard"), ("deep", "Deep")], selection: $scanDepth)
+            }
+            RowDivider()
+            SettingsRow(icon: "sparkles", color: .ssTeal, title: "Scan on open") {
+                Toggle("", isOn: $autoScan).labelsHidden().tint(.ssViolet)
+            }
+        }
+    }
+
+    private var storageCard: some View {
+        SettingsCard(title: "Storage", footer: "Removes leftover temporary files (e.g. from interrupted compressions).") {
+            Button(action: clearTemporaryFiles) {
+                SettingsRow(icon: "trash", color: .ssCoral, title: "Clear temporary files") {
+                    if cacheCleared {
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.circle.fill")
+                            Text("Cleared")
+                        }
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.ssTeal)
+                    } else {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundStyle(Color.ssTextTertiary)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var aboutCard: some View {
+        SettingsCard(title: "About", footer: nil) {
+            SettingsRow(icon: "info.circle", color: .ssIndigo, title: "Version") {
+                Text(appVersion)
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Color.ssTextSecondary)
+            }
+            RowDivider()
+            Button {
+                showPrivacy = true
+            } label: {
+                SettingsRow(icon: "lock.shield", color: .ssSky, title: "Privacy Policy") {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(Color.ssTextTertiary)
+                }
+            }
+            .buttonStyle(.plain)
         }
     }
 
@@ -99,6 +157,104 @@ struct SettingsView: View {
     }
 }
 
+// MARK: - Building blocks
+
+private struct SettingsCard<Content: View>: View {
+    let title: String
+    let footer: String?
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(LocalizedStringKey(title))
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .textCase(.uppercase)
+                .tracking(0.8)
+                .foregroundStyle(Color.ssTextTertiary)
+                .padding(.leading, 6)
+
+            VStack(spacing: 0) { content }
+                .glassCard(radius: 20)
+
+            if let footer {
+                Text(footer)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.ssTextTertiary)
+                    .padding(.horizontal, 6)
+                    .padding(.top, 2)
+            }
+        }
+    }
+}
+
+private struct SettingsRow<Trailing: View>: View {
+    let icon: String
+    let color: Color
+    let title: String
+    @ViewBuilder let trailing: Trailing
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 9, style: .continuous)
+                    .fill(LinearGradient(colors: [color, color.opacity(0.75)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 30, height: 30)
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            Text(LocalizedStringKey(title))
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color.ssTextPrimary)
+            Spacer(minLength: 8)
+            trailing
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .contentShape(Rectangle())
+    }
+}
+
+private struct RowDivider: View {
+    var body: some View {
+        Rectangle()
+            .fill(Color.ssTextTertiary.opacity(0.15))
+            .frame(height: 1)
+            .padding(.leading, 56)
+    }
+}
+
+private struct SegmentedControl: View {
+    let options: [(key: String, label: String)]
+    @Binding var selection: String
+
+    var body: some View {
+        HStack(spacing: 4) {
+            ForEach(options, id: \.key) { option in
+                let selected = selection == option.key
+                Text(LocalizedStringKey(option.label))
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundStyle(selected ? .white : Color.ssTextSecondary)
+                    .padding(.horizontal, 14)
+                    .frame(height: 32)
+                    .background(
+                        Group {
+                            if selected {
+                                Capsule().fill(LinearGradient(colors: [.ssViolet, .ssTeal], startPoint: .leading, endPoint: .trailing))
+                            } else {
+                                Capsule().fill(Color.ssTextTertiary.opacity(0.12))
+                            }
+                        }
+                    )
+                    .contentShape(Capsule())
+                    .onTapGesture {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) { selection = option.key }
+                    }
+            }
+        }
+    }
+}
+
 // MARK: - Privacy policy
 
 struct PrivacyPolicyView: View {
@@ -106,34 +262,48 @@ struct PrivacyPolicyView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Your privacy")
-                        .font(.title2.bold())
-
-                    Text("SpaceSlim works entirely on your device. It reads your photo library only to find items you can clean up — similar and duplicate photos, blurry shots, large videos, screenshots, and screen recordings.")
-
-                    Text("What we access")
-                        .font(.headline)
-                    Text("• Your photo library, to scan and classify media.\n• On-device storage information, to show how full your device is.")
-
-                    Text("What we don't do")
-                        .font(.headline)
-                    Text("• Nothing is uploaded to any server.\n• No analytics or tracking.\n• Deletions and compressions happen locally, and always go through the system's own confirmation.")
-
-                    Text("You stay in control")
-                        .font(.headline)
-                    Text("You choose what to delete or compress. You can revoke photo access any time in the Settings app.")
+            ZStack {
+                HomeBackground()
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 18) {
+                        section("Your privacy",
+                                "SpaceSlim works entirely on your device. It reads your photo library only to find items you can clean up — similar and duplicate photos, blurry shots, large videos, screenshots, and screen recordings.")
+                        section("What we access",
+                                "• Your photo library, to scan and classify media.\n• On-device storage information, to show how full your device is.")
+                        section("What we don't do",
+                                "• Nothing is uploaded to any server.\n• No analytics or tracking.\n• Deletions and compressions happen locally, and always go through the system's own confirmation.")
+                        section("You stay in control",
+                                "You choose what to delete or compress. You can revoke photo access any time in the Settings app.")
+                    }
+                    .padding(20)
+                    .padding(.bottom, 40)
                 }
-                .padding(20)
             }
             .navigationTitle("Privacy Policy")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .tint(.ssViolet)
                 }
             }
         }
+    }
+
+    private func section(_ title: String, _ body: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.system(size: 17, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.ssTextPrimary)
+            Text(body)
+                .font(.system(size: 14, weight: .regular))
+                .foregroundStyle(Color.ssTextSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .glassCard(radius: 18)
     }
 }

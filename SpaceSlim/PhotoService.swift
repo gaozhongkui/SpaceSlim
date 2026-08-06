@@ -70,24 +70,48 @@ class PhotoService: ObservableObject {
         // Phase 1 — analyze each photo once: feature print (for similar/dup),
         // sharpness (for blur) and face presence (for portraits), all reusing
         // the same fetched thumbnail. 0 → 0.85.
-        for i in 0..<total {
-            let asset = allPhotos.object(at: i)
-            let result = await analyzePhoto(for: asset)
-            if let fingerprint = result.fingerprint {
-                fingerprints.append((asset, fingerprint))
-            }
-            if result.sharpness < threshold {
-                blurry.append(asset)
-            }
-            if result.hasFace {
-                portraits.append(asset)
+        //
+        // Runs a bounded number of analyses concurrently (big speed-up on a real
+        // device) while preserving the original date-sorted order, which the
+        // grouping phase relies on.
+        let concurrency = max(2, min(ProcessInfo.processInfo.activeProcessorCount, 6))
+        var results = [PhotoAnalysis?](repeating: nil, count: total)
+
+        await withTaskGroup(of: (Int, PhotoAnalysis).self) { group in
+            var index = 0
+            while index < total && index < concurrency {
+                let i = index
+                let asset = allPhotos.object(at: i)
+                group.addTask { (i, await self.analyzePhoto(for: asset)) }
+                index += 1
             }
 
-            let done = i + 1
-            await MainActor.run {
-                self.progress = Double(done) / Double(max(total, 1)) * 0.85
-                self.scanStage = "Analyzing photos \(done)/\(total)"
+            var done = 0
+            for await (i, res) in group {
+                results[i] = res
+                done += 1
+                if done % 5 == 0 || done == total {
+                    let d = done
+                    await MainActor.run {
+                        self.progress = Double(d) / Double(max(total, 1)) * 0.85
+                        self.scanStage = "Analyzing photos \(d)/\(total)"
+                    }
+                }
+                if index < total {
+                    let j = index
+                    let asset = allPhotos.object(at: j)
+                    group.addTask { (j, await self.analyzePhoto(for: asset)) }
+                    index += 1
+                }
             }
+        }
+
+        for i in 0..<total {
+            guard let result = results[i] else { continue }
+            let asset = allPhotos.object(at: i)
+            if let fingerprint = result.fingerprint { fingerprints.append((asset, fingerprint)) }
+            if result.sharpness < threshold { blurry.append(asset) }
+            if result.hasFace { portraits.append(asset) }
         }
 
         #if targetEnvironment(simulator)
@@ -199,7 +223,7 @@ class PhotoService: ObservableObject {
     /// Fetches one thumbnail per asset and derives the Vision feature print
     /// (similar/dup), a sharpness score (blur) and whether it contains a face
     /// (portraits) from it, so a full scan only touches each photo once.
-    private func analyzePhoto(for asset: PHAsset) async -> (fingerprint: VNFeaturePrintObservation?, sharpness: Double, hasFace: Bool) {
+    private func analyzePhoto(for asset: PHAsset) async -> PhotoAnalysis {
         return await withCheckedContinuation { continuation in
             let options = PHImageRequestOptions()
             options.isSynchronous = false
@@ -218,7 +242,7 @@ class PhotoService: ObservableObject {
                 guard let image, let cgImage = Self.cgImage(from: image) else {
                     resumed = true
                     // Couldn't load — treat as sharp so we don't false-flag it.
-                    continuation.resume(returning: (nil, .greatestFiniteMagnitude, false))
+                    continuation.resume(returning: PhotoAnalysis(fingerprint: nil, sharpness: .greatestFiniteMagnitude, hasFace: false))
                     return
                 }
                 resumed = true
@@ -234,9 +258,21 @@ class PhotoService: ObservableObject {
                 try? handler.perform([faceRequest])
 
                 let hasFace = !((faceRequest.results as? [VNFaceObservation])?.isEmpty ?? true)
-                continuation.resume(returning: (featurePrint.results?.first as? VNFeaturePrintObservation, sharpness, hasFace))
+                continuation.resume(returning: PhotoAnalysis(
+                    fingerprint: featurePrint.results?.first as? VNFeaturePrintObservation,
+                    sharpness: sharpness,
+                    hasFace: hasFace))
             }
         }
+    }
+
+    /// Per-photo analysis result from a single thumbnail pass. The Vision
+    /// observation is immutable after creation, so this is safe to hand between
+    /// concurrent analysis tasks.
+    private struct PhotoAnalysis: @unchecked Sendable {
+        let fingerprint: VNFeaturePrintObservation?
+        let sharpness: Double
+        let hasFace: Bool
     }
 
     /// Returns a CGImage for a UIImage, rendering one when the image is
@@ -337,6 +373,23 @@ class PhotoService: ObservableObject {
         return (similar, duplicates, portraits)
     }
     #endif
+
+    /// Removes deleted assets from the in-memory scan results so the dashboard
+    /// stays accurate after a delete, without needing a full re-scan.
+    func remove(assetIDs ids: Set<String>) {
+        guard !ids.isEmpty else { return }
+        blurryPhotos.removeAll { ids.contains($0.localIdentifier) }
+        portraitPhotos.removeAll { ids.contains($0.localIdentifier) }
+        similarGroups = Self.prune(similarGroups, removing: ids)
+        duplicateGroups = Self.prune(duplicateGroups, removing: ids)
+    }
+
+    private static func prune(_ groups: [PhotoGroup], removing ids: Set<String>) -> [PhotoGroup] {
+        groups.compactMap { group in
+            let remaining = group.assets.filter { !ids.contains($0.localIdentifier) }
+            return remaining.count > 1 ? PhotoGroup(assets: remaining) : nil
+        }
+    }
 
     func calculateSize(for assets: [PHAsset]) async -> Int64 {
         var totalSize: Int64 = 0

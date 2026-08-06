@@ -1,5 +1,6 @@
 import SwiftUI
 import Photos
+import PhotosUI
 import UIKit
 
 // MARK: - Home screen (dashboard)
@@ -12,6 +13,8 @@ struct HomeView: View {
     @Binding var selectedTab: Int
 
     @AppStorage("autoScan") private var autoScan = true
+    @AppStorage("didOnboard") private var didOnboard = false
+    @Environment(\.scenePhase) private var scenePhase
 
     @State private var categories: [MediaCategory] = [
         MediaCategory(title: "Large videos", subtitle: "Not scanned", count: 0, sizeGB: 0, proportion: 0, icon: "play.rectangle.fill", color: .ssEmber, isSelected: true),
@@ -43,6 +46,7 @@ struct HomeView: View {
     private var isAccessDenied: Bool {
         photoService.authorizationStatus == .denied || photoService.authorizationStatus == .restricted
     }
+    private var isLimited: Bool { photoService.authorizationStatus == .limited }
     private var usedGB: Double { Double(storageService.usedSpace) / 1024 / 1024 / 1024 }
     private var totalGB: Double { Double(storageService.totalSpace) / 1024 / 1024 / 1024 }
 
@@ -53,6 +57,7 @@ struct HomeView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     header
+                    if isLimited { limitedBanner }
                     DashboardCard(
                         compressibleBytes: compressibleBytes,
                         cleanableBytes: recommendedBytes,
@@ -73,6 +78,7 @@ struct HomeView: View {
                 .padding(.top, 12)
                 .padding(.bottom, 110)
             }
+            .refreshable { await runScan() }
 
             if showFreedToast {
                 freedToast
@@ -80,7 +86,24 @@ struct HomeView: View {
         }
         .onAppear {
             storageService.refresh()
-            if autoScan && !hasScanned && !isScanning {
+            if autoScan && didOnboard && !hasScanned && !isScanning {
+                startGlobalScan()
+            }
+        }
+        // The onboarding cover sits on top of Home, so Home's `onAppear` does not
+        // fire again when it is dismissed. Kick off the first scan when onboarding
+        // completes (didOnboard flips to true).
+        .onChange(of: didOnboard) { done in
+            if done && autoScan && !hasScanned && !isScanning {
+                startGlobalScan()
+            }
+        }
+        // If the user grants photo access later (e.g. from the system Settings
+        // app), rescan when we come back to the foreground.
+        .onChange(of: scenePhase) { phase in
+            guard phase == .active, didOnboard, autoScan, !hasScanned, !isScanning else { return }
+            photoService.checkAuthorization()
+            if photoService.authorizationStatus == .authorized || photoService.authorizationStatus == .limited {
                 startGlobalScan()
             }
         }
@@ -95,11 +118,11 @@ struct HomeView: View {
             NavigationStack {
                 switch detail {
                 case .similar:
-                    PhotoGroupsView(title: "Similar photos", groups: photoService.similarGroups)
+                    PhotoGroupsView(title: "Similar photos", groups: photoService.similarGroups, onDeleted: handleDeleted)
                 case .duplicates:
-                    PhotoGroupsView(title: "Duplicates", groups: photoService.duplicateGroups)
+                    PhotoGroupsView(title: "Duplicates", groups: photoService.duplicateGroups, onDeleted: handleDeleted)
                 case .category(let category):
-                    MediaGridView(title: category.title) { assetsFor(category: category) }
+                    MediaGridView(title: category.title, load: { assetsFor(category: category) }, onDeleted: handleDeleted)
                 }
             }
         }
@@ -182,6 +205,48 @@ struct HomeView: View {
         .background(Capsule().fill(.ultraThinMaterial))
         .overlay(Capsule().strokeBorder(Color.white.opacity(0.3), lineWidth: 1))
         .frame(maxWidth: .infinity)
+    }
+
+    private var limitedBanner: some View {
+        Button {
+            presentLimitedPicker()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "photo.badge.plus")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.ssViolet)
+                    .frame(width: 36, height: 36)
+                    .background(Circle().fill(Color.ssViolet.opacity(0.14)))
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Limited photo access")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.ssTextPrimary)
+                    Text("SpaceSlim can only scan the photos you selected")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.ssTextTertiary)
+                        .lineLimit(1)
+                }
+                Spacer(minLength: 6)
+                Text("Select more")
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.ssViolet)
+            }
+            .padding(14)
+            .glassCard(radius: 18, tint: .ssViolet)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func presentLimitedPicker() {
+        let root = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first(where: { $0.isKeyWindow })?
+            .rootViewController
+        guard let root else { return }
+        var top = root
+        while let presented = top.presentedViewController { top = presented }
+        PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: top)
     }
 
     private var categoriesSection: some View {
@@ -284,31 +349,46 @@ struct HomeView: View {
     // MARK: - Scan
 
     private func startGlobalScan() {
-        guard !isScanning else { return }
-        Task {
-            var status = photoService.authorizationStatus
-            if status == .notDetermined {
-                status = await photoService.requestAuthorization()
-            }
-            guard status == .authorized || status == .limited else { return }
+        Task { await runScan() }
+    }
 
-            storageService.refresh()
-            videoService.fetchAndClassifyVideos()
-            await photoService.scanForSimilarAndDuplicatePhotos()
-            hasScanned = true
-            updateRealData()
+    /// Awaitable scan used by both auto-scan and pull-to-refresh.
+    private func runScan() async {
+        guard !isScanning else { return }
+        var status = photoService.authorizationStatus
+        if status == .notDetermined {
+            status = await photoService.requestAuthorization()
         }
+        guard status == .authorized || status == .limited else { return }
+
+        storageService.refresh()
+        videoService.fetchAndClassifyVideos()
+        await photoService.scanForSimilarAndDuplicatePhotos()
+        hasScanned = true
+        updateRealData()
+    }
+
+    /// Called when a detail page deletes assets: drop them from the scan
+    /// results and recompute the dashboard so counts + Reclaimable stay accurate
+    /// without a full re-scan.
+    private func handleDeleted(_ ids: Set<String>) {
+        guard !ids.isEmpty else { return }
+        photoService.remove(assetIDs: ids)
+        videoService.remove(assetIDs: ids)
+        storageService.refresh()
+        updateRealData()
     }
 
     private func updateRealData() {
         Task {
-            let screenshots = fetchAssets(subtype: .photoScreenshot)
-            let livePhotos = fetchAssets(subtype: .photoLive)
+            let screenshots = screenshotAssets()
+            let livePhotos = livePhotoAssets()
+            let screenRecordings = screenRecordingAssets()
 
             async let screenshotsSize = photoService.calculateSize(for: screenshots)
             async let livePhotosSize = photoService.calculateSize(for: livePhotos)
             async let largeVideosSize = videoService.calculateSize(for: videoService.cameraVideos)
-            async let screenRecordingsSize = videoService.calculateSize(for: videoService.screenRecordings)
+            async let screenRecordingsSize = videoService.calculateSize(for: screenRecordings)
             async let blurrySize = photoService.calculateSize(for: photoService.blurryPhotos)
             async let portraitSize = photoService.calculateSize(for: photoService.portraitPhotos)
 
@@ -341,7 +421,7 @@ struct HomeView: View {
                     (title: "Large videos", count: videoService.cameraVideos.count, size: lvSize, icon: "play.rectangle.fill", color: Color.ssEmber),
                     (title: "Screenshots", count: screenshots.count, size: sSize, icon: "camera.viewfinder", color: Color.ssTeal),
                     (title: "Live Photos", count: livePhotos.count, size: lSize, icon: "livephoto", color: Color.ssPink),
-                    (title: "Screen recordings", count: videoService.screenRecordings.count, size: srSize, icon: "record.circle", color: Color.ssCoral),
+                    (title: "Screen recordings", count: screenRecordings.count, size: srSize, icon: "record.circle", color: Color.ssCoral),
                     (title: "Blurry photos", count: blurryCount, size: blSize, icon: "camera.filters", color: Color.ssIndigo),
                     (title: "Portraits", count: portraitCount, size: ptSize, icon: "person.crop.square.fill", color: Color.ssSky)
                 ]
@@ -435,14 +515,56 @@ struct HomeView: View {
     private func assetsFor(category: MediaCategory) -> [PHAsset] {
         switch category.title {
         case "Large videos":      return videoService.cameraVideos
-        case "Screenshots":       return fetchAssets(subtype: .photoScreenshot)
-        case "Live Photos":       return fetchAssets(subtype: .photoLive)
-        case "Screen recordings": return videoService.screenRecordings
+        case "Screenshots":       return screenshotAssets()
+        case "Live Photos":       return livePhotoAssets()
+        case "Screen recordings": return screenRecordingAssets()
         case "Blurry photos":     return photoService.blurryPhotos
         case "Portraits":         return photoService.portraitPhotos
         default:                  return []
         }
     }
+
+    // Subtype-based categories. On a real device these read the true photo
+    // subtypes; in the Simulator (where those can't be seeded) they fall back to
+    // slices of the library so the whole dashboard can be previewed.
+    private func screenshotAssets() -> [PHAsset] {
+        let real = fetchAssets(subtype: .photoScreenshot)
+        #if targetEnvironment(simulator)
+        return real.isEmpty ? mockSlice(from: 0, count: 4) : real
+        #else
+        return real
+        #endif
+    }
+
+    private func livePhotoAssets() -> [PHAsset] {
+        let real = fetchAssets(subtype: .photoLive)
+        #if targetEnvironment(simulator)
+        return real.isEmpty ? mockSlice(from: 4, count: 3) : real
+        #else
+        return real
+        #endif
+    }
+
+    private func screenRecordingAssets() -> [PHAsset] {
+        #if targetEnvironment(simulator)
+        return videoService.screenRecordings.isEmpty
+            ? Array(videoService.cameraVideos.suffix(2))
+            : videoService.screenRecordings
+        #else
+        return videoService.screenRecordings
+        #endif
+    }
+
+    #if targetEnvironment(simulator)
+    /// A deterministic wrap-around slice of the photo library, for preview data.
+    private func mockSlice(from start: Int, count: Int) -> [PHAsset] {
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let result = PHAsset.fetchAssets(with: .image, options: options)
+        guard result.count > 0 else { return [] }
+        return (0..<count).map { result.object(at: (start + $0) % result.count) }
+    }
+    #endif
 
     private func fetchAssets(subtype: PHAssetMediaSubtype) -> [PHAsset] {
         let options = PHFetchOptions()
@@ -636,9 +758,9 @@ struct ActionPill: View {
                     Text(amount.unit)
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                 }
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.system(size: 14, weight: .bold, design: .rounded))
-                Text(subtitle)
+                Text(LocalizedStringKey(subtitle))
                     .font(.system(size: 10, weight: .semibold))
                     .opacity(0.9)
             }
@@ -694,7 +816,7 @@ struct CategoryChip: View {
                 .font(.system(size: 30, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.ssTextPrimary)
                 .monospacedDigit()
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.ssTextSecondary)
                 .lineLimit(1)
