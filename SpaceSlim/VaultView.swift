@@ -77,6 +77,7 @@ struct VaultView: View {
             VaultPicker { assets in
                 Task {
                     let result = await store.importAssets(assets)
+                    if result.added > 0 { UINotificationFeedbackGenerator().notificationOccurred(.success) }
                     showToast(result.added > 0
                               ? "Added \(result.added)\(result.removedOriginals ? " · originals removed" : "")"
                               : "Nothing added")
@@ -180,6 +181,7 @@ struct VaultView: View {
                 Task {
                     let n = await store.export(selection)
                     selection.removeAll()
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     showToast("\(n) restored to Photos")
                 }
             } label: {
@@ -189,6 +191,7 @@ struct VaultView: View {
             Button {
                 store.remove(selection)
                 selection.removeAll()
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
             } label: {
                 barButton(icon: "trash.fill", title: "Delete", colors: [.ssCoral, Color(red: 0.91, green: 0.26, blue: 0.23)])
             }
@@ -231,6 +234,7 @@ struct VaultView: View {
                 DispatchQueue.main.async {
                     unlocked = success
                     authFailed = !success
+                    if success { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
                 }
             }
         } else {

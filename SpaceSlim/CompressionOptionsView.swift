@@ -454,6 +454,7 @@ struct CompressionRunView: View {
                 successCount = ok
                 processedOriginalBytes = originalTotal
                 processedCompressedBytes = compressedTotal
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { finished = true }
             }
         }

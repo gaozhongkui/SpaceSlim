@@ -210,6 +210,7 @@ struct MediaGridView: View {
                     let deleted = Set(toDelete.map(\.localIdentifier))
                     removeLocally(deleted)
                     onDeleted(deleted)
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     // Keep the progress page visible briefly, then show the result.
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation { deletePhase = .done }
@@ -398,6 +399,7 @@ struct PhotoGroupsView: View {
                     }
                     selectedIDs.removeAll()
                     onDeleted(Set(toDelete.map(\.localIdentifier)))
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation { deletePhase = .done }
                     }
@@ -926,6 +928,7 @@ struct MediaPreviewView: View {
                 isDeleting = false
                 if success {
                     onDeleted(asset)
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     dismiss()
                 }
             }

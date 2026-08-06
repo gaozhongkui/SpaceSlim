@@ -486,6 +486,7 @@ struct HomeView: View {
                 if success {
                     historyStore.add(freedBytes: freed, itemCount: count, kind: .cleanup)
                     freedText = formatSize(freed)
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     withAnimation(.spring(response: 0.45, dampingFraction: 0.7)) { showFreedToast = true }
                     storageService.refresh()
                     startGlobalScan()
